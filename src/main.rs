@@ -12,9 +12,8 @@ async fn index() -> impl Responder {
     HttpResponse::Ok().body("Hello world!")
 }
 
-#[actix_rt::main]
+#[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    
     HttpServer::new(|| App::new().route("/", web::get().to(index)))
         .bind("127.0.0.1:8001")?
         .run()
