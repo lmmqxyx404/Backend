@@ -13,3 +13,4 @@ extern crate rbatis;
 ///工具类
 #[macro_use]
 pub mod util;
+pub mod config;
