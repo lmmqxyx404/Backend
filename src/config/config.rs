@@ -39,7 +39,7 @@ pub struct ApplicationConfig {
 ///默认配置
 impl Default for ApplicationConfig {
     fn default() -> Self {
-        let yml_data = include_str!("../../application.yml");
+        let yml_data = include_str!("../../config.yml");
         //读取配置
         let result:ApplicationConfig = serde_yaml::from_str(yml_data).expect("load config file fail");
         if result.debug {

@@ -1,7 +1,9 @@
-pub struct PasswordEncoder{}
+pub struct PasswordEncoder {}
 
-impl PasswordEncoder{
-    pub fn encode(raw_password:&str)->String{
-        String::from("hello")
+impl PasswordEncoder {
+    /// 加密明文密码
+    pub fn encode(raw_password: &str) -> String {
+        let encode_str = String::from("hello");
+        encode_str
     }
 }

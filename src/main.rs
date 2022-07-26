@@ -14,6 +14,11 @@ async fn index() -> impl Responder {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    // 1. 大型后端项目需要首先记录日志
+
+    // 2. 选择连接数据库
+    // 3. 启动路由服务
+    // 3.1 首先创建服务器实例App::new()
     HttpServer::new(|| App::new().route("/", web::get().to(index)))
         .bind("127.0.0.1:8001")?
         .run()

@@ -13,4 +13,8 @@ extern crate rbatis;
 ///工具类
 #[macro_use]
 pub mod util;
+/// 配置模块
 pub mod config;
+
+/// 服务模块
+pub mod service;
