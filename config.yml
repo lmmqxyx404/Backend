@@ -35,6 +35,9 @@ login_fail_retry: 3
 #登陆失败重试次数限制超过后提示的等待时间（秒）
 login_fail_retry_wait_sec: 30
 #接口白名单（免登陆直接访问）
+## 1. 默认路由（测试使用）
+## 2. 登录接口
+## 3. 获取验证码接口
 white_list_api:
  - "/"
  - "/admin/sys_login"
