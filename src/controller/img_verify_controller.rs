@@ -1,13 +1,17 @@
+use crate::domain::dto::sign_in::CaptchaDTO;
+use crate::util::string::isEmptyString;
 use actix_web::{web, HttpResponse, Responder};
 use captcha::filters::{Dots, Noise, Wave};
 use captcha::Captcha;
-
 /// 图形验证码接口
 /// debug 模式下无论缓存是否连接成功，都返回图片，release 模式下会校验reddis 缓存
 /// 请求时必须带上 account
-pub async fn captcha() -> impl Responder {
-
-
+pub async fn captcha(arg: web::Query<CaptchaDTO>) -> impl Responder {
+    /*
+    if arg.account.is_empty() {
+        return 
+    }
+     */
     let mut captcha = Captcha::new();
     captcha
         // add_chars(4) 验证码字符个数

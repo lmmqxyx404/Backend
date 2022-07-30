@@ -26,4 +26,4 @@ pub mod service;
 pub mod error;
 
 /// 领域模型
-/// pub mod domain;
+pub mod domain;
