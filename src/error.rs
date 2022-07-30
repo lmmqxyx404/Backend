@@ -1,0 +1,53 @@
+//! Error and Result types.
+use std::error::Error as StdError;
+use std::fmt::{self, Debug, Display};
+use std::io;
+
+use serde::de::Visitor;
+use serde::ser::{Serialize, Serializer};
+use serde::{Deserialize, Deserializer};
+
+// pub type Result<T> = std::result::Result<T, Error>;
+
+/// A generic error that reprsents all
+#[derive(Debug)]
+#[non_exhaustive]
+pub enum Error {
+    /// Default Error
+    E(String),
+}
+
+impl Display for Error {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Error::E(error) => write!(f, "{}", error),
+        }
+    }
+}
+
+impl StdError for Error {}
+
+impl From<io::Error> for Error {
+    #[inline]
+    fn from(err: io::Error) -> Self {
+        Error::from(err.to_string())
+    }
+}
+
+impl From<&str> for Error {
+    fn from(arg: &str) -> Self {
+        return Error::E(arg.to_string());
+    }
+}
+
+impl From<std::string::String> for Error {
+    fn from(arg: String) -> Self {
+        return Error::E(arg);
+    }
+}
+
+impl From<&dyn std::error::Error> for Error {
+    fn from(arg: &dyn std::error::Error) -> Self {
+        return Error::E(arg.to_string());
+    }
+}

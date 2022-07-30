@@ -20,3 +20,10 @@ pub mod config;
 pub mod controller;
 /// 服务模块
 pub mod service;
+
+/// 错误模块
+/// 专门处理各种错误下信息，主动报错，或者被动报错
+pub mod error;
+
+/// 领域模型
+/// pub mod domain;
