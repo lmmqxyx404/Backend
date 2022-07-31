@@ -51,3 +51,15 @@ impl From<&dyn std::error::Error> for Error {
         return Error::E(arg.to_string());
     }
 }
+
+/// ERROR 实现 CLONE trait
+/// 在vo 中 RespVO 会用到这一 trait
+impl Clone for Error {
+    fn clone(&self) -> Self {
+        Error::from(self.to_string())
+    }
+
+    fn clone_from(&mut self, source: &Self) {
+        *self = Self::from(source.to_string());
+    }
+}
