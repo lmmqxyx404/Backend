@@ -3,6 +3,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::error::Error;
 
+use actix_web::HttpResponse;
 const SUCCESS_CODE: &str = "SUCCESS";
 const FAIL_CODE: &str = "FAIL";
 
@@ -31,5 +32,32 @@ where
                 msg: Some(arg.clone().err().unwrap().to_string()),
             }
         }
+    }
+
+    /// 转化为标准 RespVO
+    pub fn from(arg: &T) -> Self {
+        Self {
+            code: Some(SUCCESS_CODE.to_string()),
+            msg: None,
+            data: Some(arg.clone()),
+        }
+    }
+
+    pub fn resp_json(&self) -> HttpResponse {
+        return HttpResponse::Ok()
+            .insert_header(("Access-Control-Allow-Origin", "*"))
+            .insert_header(("Cache-Control", "no-cache"))
+            .insert_header(("Content_Type", "text/json;charset=UTF-8"))
+            .body(self.to_string());
+    }
+}
+
+/// 实现 ToString trait 从而方便给 resp_json 方法使用
+impl<T> ToString for RespVO<T>
+where
+    T: Serialize + DeserializeOwned + Clone,
+{
+    fn to_string(&self) -> String {
+        serde_json::to_string(self).unwrap()
     }
 }
