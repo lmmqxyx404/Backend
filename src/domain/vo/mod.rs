@@ -18,6 +18,7 @@ impl<T> RespVO<T>
 where
     T: Serialize + DeserializeOwned + Clone,
 {
+    /// 正确数据 转化为标准 RespVO
     pub fn from_result(arg: &Result<T, Error>) -> Self {
         if arg.is_ok() {
             Self {
@@ -34,12 +35,24 @@ where
         }
     }
 
-    /// 转化为标准 RespVO
+    /// 原始数据 转化为标准 RespVO
     pub fn from(arg: &T) -> Self {
         Self {
             code: Some(SUCCESS_CODE.to_string()),
             msg: None,
             data: Some(arg.clone()),
+        }
+    }
+    /// 错误数据 转化为标准 RespVO
+    pub fn from_error(arg: &Error, code: &str) -> Self {
+        let mut code_string = code.to_string();
+        if code_string.is_empty() {
+            code_string = FAIL_CODE.to_string();
+        }
+        Self {
+            code: Some(code_string),
+            msg: Some(arg.to_string()),
+            data: None,
         }
     }
 

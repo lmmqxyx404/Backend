@@ -1,4 +1,6 @@
 use crate::domain::dto::sign_in::CaptchaDTO;
+use crate::domain::vo::RespVO;
+use crate::error::Error;
 use crate::util::string::isEmptyString;
 use actix_web::{web, HttpResponse, Responder};
 use captcha::filters::{Dots, Noise, Wave};
@@ -7,11 +9,11 @@ use captcha::Captcha;
 /// debug 模式下无论缓存是否连接成功，都返回图片，release 模式下会校验reddis 缓存
 /// 请求时必须带上 account
 pub async fn captcha(arg: web::Query<CaptchaDTO>) -> impl Responder {
-    /*
+    /// 账户为空时，不输出验证码，并且报错
     if arg.account.is_empty() {
-        return 
+        return RespVO::<()>::from_error(&Error::from("account is empty"), "-1").resp_json();
     }
-     */
+
     let mut captcha = Captcha::new();
     captcha
         // add_chars(4) 验证码字符个数
