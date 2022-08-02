@@ -4,3 +4,7 @@ use serde::{Deserialize, Serialize};
 pub struct CaptchaDTO {
     pub account: Option<String>,
 }
+
+/// 登录
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SignDTO{}

@@ -8,7 +8,7 @@
  */
 use actix_web::{web, App, HttpResponse, HttpServer, Responder};
 
-use backend::controller::{img_verify_controller};
+use backend::controller::{img_verify_controller, sys_user_controller};
 async fn index() -> impl Responder {
     HttpResponse::Ok().body("Hello world!")
 }
@@ -24,7 +24,15 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .route("/", web::get().to(index))
             // 验证码路由接口
-            .route("/admin/captcha", web::get().to(img_verify_controller::captcha))
+            .route(
+                "/admin/captcha",
+                web::get().to(img_verify_controller::captcha),
+            )
+            // 登录接口，实现登录功能
+            .route(
+                "/admin/sys_login",
+                web::post().to(sys_user_controller::login),
+            )
     })
     .bind("127.0.0.1:8001")?
     .run()
