@@ -1,8 +1,10 @@
 use crate::config::config::ApplicationConfig;
 
 /// service 层级
-pub mod sys_config_service;
+//pub mod sys_config_service;
 
+/// 系统用户层
+pub mod sys_user_service;
 // service context 必须为 pub,否则 无法给上下文使用
 pub struct ServiceContext {
     pub config: ApplicationConfig,
