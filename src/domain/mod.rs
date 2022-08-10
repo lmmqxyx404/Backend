@@ -3,3 +3,6 @@ pub mod dto;
 
 /// * View Object 展示层，存放展示的结构体。也就是http response
 pub mod vo;
+
+/// * Domain 领域层，存放数据库结构体模型
+pub mod domain;

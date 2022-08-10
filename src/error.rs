@@ -7,7 +7,8 @@ use serde::de::Visitor;
 use serde::ser::{Serialize, Serializer};
 use serde::{Deserialize, Deserializer};
 
-// pub type Result<T> = std::result::Result<T, Error>;
+/// in service::sys_user, this would be uiseful
+pub type Result<T> = std::result::Result<T, Error>;
 
 /// A generic error that reprsents all
 #[derive(Debug)]
