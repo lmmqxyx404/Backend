@@ -25,3 +25,15 @@
 ### 后期考虑添加支持手机验证码登录
 
 ## 0.3 退出登录接口
+
+# rust 代码开发技巧
+## 使用空的结构体实现一系列方法集合
+```
+struct service {};
+impl service {
+    fn new(){};
+    fn default(){};
+    fn detail(){};
+    ...
+}
+```
