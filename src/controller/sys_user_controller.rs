@@ -15,9 +15,9 @@ pub async fn user_info(req: HttpRequest) -> impl Responder {
     let token = req.headers().get("access-token");
     match token {
         Some(token) => {
-            let token_token=token.to_str().unwrap_or("");
+            let token_token = token.to_str().unwrap_or("");
             // 后续修改
-            return RespVO::<()>::from_error(&Error::from("access token"), "-10").resp_json(),
+            return RespVO::<()>::from_error(&Error::from("access token"), "-10").resp_json();
         }
         _ => return RespVO::<()>::from_error(&Error::from("access token"), "-10").resp_json(),
     }
