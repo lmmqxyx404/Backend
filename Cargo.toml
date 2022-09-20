@@ -36,3 +36,6 @@ md5 = "0.7.0"
 
 #captcha 验证码库
 captcha = "0.0.8"
+
+# jwt 工具库
+jsonwebtoken = "8"

@@ -48,3 +48,6 @@ impl service {
 
 ## 2. rbatis
 提供 orm
+
+## 3. jsonwebtoken
+引入 json_web_token 校验
