@@ -20,6 +20,7 @@ impl SysUserService {
         Ok(interimVO)
     }
 
+    ///  获得用户信息
     pub async fn get_user_info(&self, user: &SysUser) -> Result<SignVO> {
         /// 去除密码
         let mut user = user.clone();
@@ -33,5 +34,25 @@ impl SysUserService {
             user: Some(SignDTO {}),
         };
         Ok(interimVO)
+    }
+
+    /// 通过token登录
+    pub async fn get_user_info_by_token(&self, user: &SysUser) -> Result<SignVO> {
+        return self.get_user_info(&user).await;
+    }
+
+    /// 是否需要等待，防止爆破。
+    pub async fn need_wait_login(&self) -> Result<()> {
+        Ok(())
+    }
+
+    /// 修改用户信息
+    pub async fn edit_user_info(&self) -> Result<()> {
+        Ok(())
+    }
+
+    /// 删除用户信息
+    pub async fn remove_user_info(&self) -> Result<()> {
+        Ok(())
     }
 }

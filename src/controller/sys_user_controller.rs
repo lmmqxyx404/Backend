@@ -10,7 +10,7 @@ pub async fn login(arg: web::Json<SignDTO>) -> impl Responder {
     return RespVO::<()>::from_error(&Error::from("empty account"), "-1").resp_json();
 }
 
-/// 用户信息接口
+/// 用户基础信息接口
 pub async fn user_info(req: HttpRequest) -> impl Responder {
     let token = req.headers().get("access-token");
     match token {
@@ -22,3 +22,10 @@ pub async fn user_info(req: HttpRequest) -> impl Responder {
         _ => return RespVO::<()>::from_error(&Error::from("access token"), "-10").resp_json(),
     }
 }
+
+/// 用户详情接口
+/* 暂时未实现 
+pub async fn user_detail(arg: web::Json<IdDTO>) -> impl Responder{
+
+}
+*/
