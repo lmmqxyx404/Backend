@@ -23,8 +23,8 @@ pub async fn user_info(req: HttpRequest) -> impl Responder {
     }
 }
 
-/// 用户详情接口
-/* 暂时未实现 
+
+/* 用户详情接口  暂时未实现 
 pub async fn user_detail(arg: web::Json<IdDTO>) -> impl Responder{
 
 }

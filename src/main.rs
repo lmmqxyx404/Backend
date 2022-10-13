@@ -10,7 +10,7 @@ use actix_web::{web, App, HttpResponse, HttpServer, Responder};
 
 use backend::controller::{img_verify_controller, sys_user_controller};
 async fn index() -> impl Responder {
-    HttpResponse::Ok().body("Hello world!")
+    HttpResponse::Ok().body("[backend] Hello world!")
 }
 
 #[actix_web::main]
