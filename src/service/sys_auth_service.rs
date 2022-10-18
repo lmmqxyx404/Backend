@@ -1,5 +1,5 @@
-pub struct ConfigService {}
+pub struct SysAuthService {}
 
-impl ConfigService {
+impl SysAuthService {
     pub fn create(&self) {}
 }

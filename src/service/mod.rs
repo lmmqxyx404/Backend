@@ -5,15 +5,25 @@ use crate::config::config::ApplicationConfig;
 
 /// 系统用户层
 pub mod sys_user_service;
+
+/// 校验层
+pub mod sys_auth_service;
+
+pub use sys_auth_service::*;
+
 // service context 必须为 pub,否则 无法给上下文使用
 pub struct ServiceContext {
     pub config: ApplicationConfig,
+    pub sys_auth_service: SysAuthService,
 }
 
 impl Default for ServiceContext {
     fn default() -> Self {
         let config = ApplicationConfig::default();
-        ServiceContext { config }
+        ServiceContext {
+            config: config,
+            sys_auth_service: SysAuthService {},
+        }
     }
 }
 
