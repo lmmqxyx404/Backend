@@ -10,11 +10,13 @@ pub mod sys_user_service;
 pub mod sys_auth_service;
 
 pub use sys_auth_service::*;
+pub use sys_user_service::*;
 
 // service context 必须为 pub,否则 无法给上下文使用
 pub struct ServiceContext {
     pub config: ApplicationConfig,
     pub sys_auth_service: SysAuthService,
+    pub sys_user_service: SysUserService,
 }
 
 impl Default for ServiceContext {
@@ -23,6 +25,7 @@ impl Default for ServiceContext {
         ServiceContext {
             config: config,
             sys_auth_service: SysAuthService {},
+            sys_user_service: SysUserService {},
         }
     }
 }

@@ -1,9 +1,13 @@
 use crate::domain::domain::SysUser;
 use crate::domain::dto::sign_in::SignDTO;
 use crate::domain::vo::sign_in::SignVO;
+use crate::domain::vo::user::SysUserVO;
 
+use crate::domain::dto::IdDTO;
 /// use error module Result.
 use crate::error::{Error, Result};
+
+/// 绝大多数DTO映射成VO
 pub struct SysUserService {}
 
 impl SysUserService {
@@ -44,6 +48,11 @@ impl SysUserService {
     /// 是否需要等待，防止爆破。
     pub async fn need_wait_login(&self) -> Result<()> {
         Ok(())
+    }
+
+    /// 用户详情
+    pub async fn detail(&self, arg: &IdDTO) -> Result<SysUserVO> {
+        Err(Error::E("接口暂时没有实现".to_string()))
     }
 
     /// 修改用户信息
