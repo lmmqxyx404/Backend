@@ -1,5 +1,5 @@
 /// 后台用户表
-#[crud_table]
+
 #[derive(Debug, Clone)]
 pub struct SysUser {
     pub id: Option<String>,

@@ -8,11 +8,17 @@ edition = "2021"
 [dependencies]
 
 #rbatis orm dependency
-rbson = "2.0"
+
 tokio = { version = "1", features = ["full"] }
-rbatis = { version = "3.1", default-features = false, features = ["mysql", "runtime-tokio-rustls"] }
+# 3.1 depreciate
+# rbatis = { version = "3.1", default-features = false, features = ["mysql", "runtime-tokio-rustls"] }
+# rbson = "2.0"
+rbs = { version = "0.1" }
+rbatis = { version = "4", features = ["debug_mode"] }
+rbdc-mysql = { version = "0.1" }
+
 #web server
-actix-web = {version="4.0", default-features = false, features = ["macros"]}
+actix-web = { version = "4.0", default-features = false, features = ["macros"] }
 
 #static
 lazy_static = "1.4.0"
