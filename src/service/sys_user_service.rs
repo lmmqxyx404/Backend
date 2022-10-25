@@ -1,5 +1,6 @@
-use crate::domain::domain::SysUser;
+// use crate::domain::domain::SysUser;
 use crate::domain::dto::sign_in::SignDTO;
+use crate::domain::table::tables::SysUser;
 use crate::domain::vo::sign_in::SignVO;
 use crate::domain::vo::user::SysUserVO;
 
@@ -7,6 +8,9 @@ use crate::domain::dto::IdDTO;
 /// use error module Result.
 use crate::error::{Error, Result};
 
+// 使用 rbatis pool macro,注意使用的路径
+// 生成 pool 宏
+use crate::pool;
 /// 绝大多数DTO映射成VO
 pub struct SysUserService {}
 
@@ -52,7 +56,20 @@ impl SysUserService {
 
     /// 用户详情
     pub async fn detail(&self, arg: &IdDTO) -> Result<SysUserVO> {
+        let user_id = arg.id.as_deref().unwrap_or_default();
         Err(Error::E("接口暂时没有实现".to_string()))
+    }
+
+    /// 根据用户id查找user
+    pub async fn find(&self, id: &str) -> Result<Option<SysUser>> {
+        Ok(
+            SysUser::select_by_column(pool!(), field_name!(SysUser.id), id)
+                .await?
+                .into_iter()
+                .next(),
+        )
+        // Ok(SysUser::selec)
+        // Err(Error::E("接口暂时没有实现".to_string()))
     }
 
     /// 修改用户信息

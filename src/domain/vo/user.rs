@@ -1,8 +1,18 @@
 use serde::{Deserialize, Serialize};
 
-use crate::domain::dto::sign_in::SignDTO;
-/// 登录相关信息
+/// 4.0 之后的 rabatis 才支持
+use rbatis::rbdc::datetime::DateTime;
+// use crate::domain::dto::sign_in::SignDTO;
+/// 后台用户
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SysUserVO {
-    pub user: Option<SignDTO>,
+    pub id: Option<String>,
+    pub account: Option<String>,
+    pub password: Option<String>,
+    pub name: Option<String>,
+    pub login_check: Option<String>,
+    pub state: Option<String>,
+    pub del: Option<String>,
+    pub create_date: Option<DateTime>,
+    pub role: Option<String>,
 }
