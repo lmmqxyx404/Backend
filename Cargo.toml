@@ -20,8 +20,10 @@ rbdc-mysql = { version = "0.1" }
 #web server
 actix-web = { version = "4.0", default-features = false, features = ["macros"] }
 
-#static
-lazy_static = "1.4.0"
+# static 
+# change to once_cell
+# lazy_static = "1.4.0"
+once_cell = "1.9"
 
 #async trait
 async-trait = "0.1"

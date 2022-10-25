@@ -5,8 +5,11 @@
 // The following attributes are used for controlling or generating diagnostic messages during compilation.
 #![allow(unused_must_use)]
 
+/* lazy_static 不再使用, 改为 once_cell
 #[macro_use]
 extern crate lazy_static;
+*/
+ 
 #[macro_use]
 extern crate rbatis;
 
