@@ -64,3 +64,11 @@ impl Clone for Error {
         *self = Self::from(source.to_string());
     }
 }
+
+/// 为自定义 Error 实现 From<rbatis::Error>。
+/// 之后再sys_user_service find 中使用 await 时首次调用，当然还有许多其他地方使用
+impl From<rbatis::Error> for Error {
+    fn from(arg: rbatis::Error) -> Self {
+        Error::E(arg.to_string())
+    }
+}
