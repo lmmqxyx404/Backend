@@ -42,6 +42,22 @@ impl Default for ServiceContext {
     }
 }
 
+use rbdc_mysql::driver::MysqlDriver;
+impl ServiceContext {
+    pub async fn init_pool(&self) {
+        // 连接数据库
+        println!("hello world");
+        println!("[backend] rbatis pool init ({})", &self.config.database_url);
+        let res = self.rbatis.init(MysqlDriver {}, &self.config.database_url);
+        if res.is_ok() {
+            println!("[backend] rbatis success");
+        } else {
+            println!("[backend] rbatis failed");
+        }
+        //.expect("[backend] rbatis failed");
+        // 输出日志
+    }
+}
 /// 提供一个上下文引用，给其余service 使用
 /// CONTEXT  is all of the service.
 /// 2022年10月26日00点00分 修改了默认实现
@@ -57,10 +73,23 @@ pub static CONTEXT: Lazy<ServiceContext> = Lazy::new(|| ServiceContext::default(
 
 /// 生成 rbatis 连接宏
 /// 在具体的 service 中使用
-/// 1. sys_user_service::find 
+/// 1. sys_user_service::find
 #[macro_export]
 macro_rules! pool {
     () => {
         &mut $crate::service::CONTEXT.rbatis.clone()
     };
+}
+
+mod test {
+    use super::*;
+
+    #[test]
+    fn test_link_database() {
+        let aaa = ServiceContext::default();
+        println!("prepare to init_pool");
+        let res = aaa.rbatis.link(MysqlDriver {}, &aaa.config.database_url);
+        println!("{}", aaa.config.database_url);
+        assert_eq!(res.is_ok(), true);
+    }
 }
