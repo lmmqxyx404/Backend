@@ -8,7 +8,6 @@ pub mod vo;
 /// 2022年10月25日22点51分，domain 已经被拆分为 table 和 mapper 两部分
 // pub mod domain;
 
-
 /// * 实现具体的数据库查询功能
 pub mod mapper;
 
@@ -28,5 +27,6 @@ pub fn init_rbatis(config: &ApplicationConfig) -> Rbatis {
             r#" 已经使用了 release 模式运行，但是配置选项是config ，请去修改 application.yml 中debug配置项"#
         );
     }
+    println!("create a rbatis instance");
     rbatis_instance
 }
