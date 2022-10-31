@@ -5,12 +5,17 @@ use crate::domain::vo::sign_in::SignVO;
 use crate::domain::vo::user::SysUserVO;
 
 use crate::domain::dto::IdDTO;
+// 引入UserAddDTO
+use crate::domain::dto::user::UserAddDTO;
 /// use error module Result.
 use crate::error::{Error, Result};
 
 // 使用 rbatis pool macro,注意使用的路径
 // 生成 pool 宏
 use crate::pool;
+
+// 引入CONTEXT
+use crate::service::CONTEXT;
 /// 绝大多数DTO映射成VO
 pub struct SysUserService {}
 
@@ -41,6 +46,9 @@ impl SysUserService {
         let interimVO = SignVO {
             user: Some(SignDTO {}),
         };
+
+        // 上面是初步处理 SysUser 信息，与其余service进行隔离
+        // 下面是返回 user 对应的有价值的权限信息，比如 role ,以及合成 token
         Ok(interimVO)
     }
 
@@ -70,6 +78,57 @@ impl SysUserService {
         )
         // Ok(SysUser::selec)
         // Err(Error::E("接口暂时没有实现".to_string()))
+    }
+
+    /// 根据用户 account 查找 user
+    pub async fn find_by_account(&self, account: &str) -> Result<Option<SysUser>> {
+        Ok(
+            SysUser::select_by_column(pool!(), field_name!(SysUser.account), account)
+                .await?
+                .into_iter()
+                .next(),
+        )
+        // Ok(SysUser::selec)
+        // Err(Error::E("接口暂时没有实现".to_string()))
+    }
+
+    /// 添加后台账号
+    pub async fn add(&self, mut arg: UserAddDTO) -> Result<u64> {
+        if arg.account.is_none()
+            || arg.account.as_ref().is_none()
+            || arg.name.is_none()
+            || arg.name.as_ref().is_none()
+        {
+            return Err(Error::E("用户名和姓名不能为空".to_string()));
+        }
+        /*
+        code```
+        let mut password = arg.password.as_deref().unwrap_or_default().to_string();
+                if password.is_empty() {
+                    password = "123456".to_string()
+                }
+                arg.password = Some(password);
+                ```
+                */
+        let role_id = arg.role_id.clone();
+        let user = SysUser::from(arg);
+        /* if role_id.is_some() {
+            CONTEXT.sys
+        } */
+        // 注意看 rows_affected 这个函数,弄清楚返回一个u64的用意
+        Ok(SysUser::insert(pool!(), &user).await?.rows_affected)
+    }
+
+    /// 移除
+    pub async fn remove(&self, id: &str) -> Result<u64> {
+        if id.is_empty() {
+            return Err(Error::E("id不能为空".to_string()));
+        }
+        let trash = SysUser::select_by_column(pool!(), field_name!(SysUser.id), id).await?;
+        let r = SysUser::delete_by_column(pool!(), field_name!(SysUser.id), id).await?;
+        /// 记录删除日志
+        /// 删除对应用户的角色
+        Ok(64)
     }
 
     /// 修改用户信息
