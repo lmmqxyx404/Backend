@@ -12,9 +12,15 @@ mod sys_user_service;
 
 /// 校验层
 mod sys_auth_service;
+
+/// 系统用户角色
+/// 有普通用户，管理员，超级管理员，员工
+mod sys_user_role_service;
+
 // pub mod sys_config_service;
 
 pub use sys_auth_service::*;
+pub use sys_user_role_service::*;
 pub use sys_user_service::*;
 
 // service context 必须为 pub,否则 无法给上下文使用
