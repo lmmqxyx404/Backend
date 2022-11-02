@@ -3,6 +3,9 @@ use serde::{Deserialize, Serialize};
 
 use crate::{domain::dto::user::UserAddDTO, util::password_encoder::PasswordEncoder};
 
+/// 创建角色时用的上
+use rbatis::rbdc::datetime::FastDateTime;
+
 /// 后台用户表
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SysUser {
@@ -26,6 +29,13 @@ impl From<UserAddDTO> for SysUser {
     }
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SysUserRole {
+    pub id: Option<String>,
+    pub user_id: Option<String>,
+    pub role_id: Option<String>,
+    pub create_date: Option<FastDateTime>,
+}
 
 mod test {
     use crate::domain::table::enums::LoginCheck;
