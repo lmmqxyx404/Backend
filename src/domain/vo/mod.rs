@@ -4,6 +4,8 @@ pub mod jwt;
 pub mod sign_in;
 /// user vo
 pub mod user;
+/// res vo
+pub mod res;
 
 use serde::de::DeserializeOwned;
 use serde::{Deserialize, Serialize};
