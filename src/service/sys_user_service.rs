@@ -6,7 +6,7 @@ use crate::domain::vo::user::SysUserVO;
 
 use crate::domain::dto::IdDTO;
 // 引入UserAddDTO
-use crate::domain::dto::user::UserAddDTO;
+use crate::domain::dto::user::{UserAddDTO, UserPageDTO};
 /// use error module Result.
 use crate::error::{Error, Result};
 
@@ -16,10 +16,29 @@ use crate::pool;
 
 // 引入CONTEXT
 use crate::service::CONTEXT;
+/// 引入 Page
+use rbatis::sql::page::Page;
+use rbatis::sql::PageRequest;
 /// 绝大多数DTO映射成VO
 pub struct SysUserService {}
 
 impl SysUserService {
+    /// 分页功能，只返回部分数据
+    pub async fn page(&self, arg: &UserPageDTO) -> Result<Page<SysUserVO>> {
+        let sys_user_page = SysUser::select_page(
+            pool!(),
+            &PageRequest::from(arg),
+            arg.name.as_deref().unwrap_or_default(),
+            arg.account.as_deref().unwrap_or_default(),
+        )
+        .await?;
+        // 必须要实现相关 from trait
+        let page = Page::<SysUserVO>::from(sys_user_page);
+        Ok(page)
+        // Err(Error::from("hello"))
+    }
+
+    /// 登录功能服务，被登录接口调用
     pub async fn sign_in(&self, arg: &SignDTO) -> Result<SignVO> {
         /// 防止爆破登录
         let mut error = None;
