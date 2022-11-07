@@ -1,9 +1,12 @@
+use rbatis::object_id::ObjectId;
 use rbatis::rbdc::datetime::FastDateTime;
+use rbatis::sql::PageRequest;
 use serde::{Deserialize, Serialize};
 
 use crate::domain::table::enums::LoginCheck;
 
-use crate::domain::table::tables::SysUserRole;
+use crate::domain::table::{SysUser, SysUserRole};
+use crate::util::password_encoder::PasswordEncoder;
 /// UserAddDTO
 /// 用户添加DTO,侧重于用户
 #[derive(Debug, Deserialize, Serialize, Clone)]
@@ -32,5 +35,18 @@ impl From<UserRoleAddDTO> for SysUserRole {
             role_id: arg.role_id.clone(),
             create_date: FastDateTime::now().set_micro(0).into(),
         }
+    }
+}
+
+pub struct UserPageDTO {
+    pub page_no: Option<u64>,
+    pub page_size: Option<u64>,
+    pub account: Option<String>,
+    pub name: Option<String>,
+}
+
+impl From<&UserPageDTO> for PageRequest {
+    fn from(arg: &UserPageDTO) -> Self {
+        PageRequest::new(arg.page_no.unwrap_or(1), arg.page_size.unwrap_or(10))
     }
 }
