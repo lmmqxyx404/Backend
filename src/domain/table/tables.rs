@@ -6,6 +6,7 @@ use crate::{domain::dto::user::UserAddDTO, util::password_encoder::PasswordEncod
 /// 创建角色时用的上
 use rbatis::rbdc::datetime::FastDateTime;
 
+use crate::domain::table::LoginCheck;
 /// 后台用户表
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SysUser {
@@ -13,8 +14,12 @@ pub struct SysUser {
     /// 邮箱登录|手机号登录
     pub account: Option<String>,
     pub password: Option<String>,
+    pub login_check: Option<LoginCheck>,
     /// 用户名登录
     pub name: Option<String>,
+    pub state: Option<i32>,
+    pub del: Option<i32>,
+    pub create_date: Option<FastDateTime>,
 }
 
 /// 转化
@@ -25,6 +30,10 @@ impl From<UserAddDTO> for SysUser {
             account: arg.account.clone(),
             password: PasswordEncoder::encode(&arg.password.unwrap_or_default()).into(),
             name: arg.name.clone(),
+            login_check: arg.login_check,
+            state: 0.into(),
+            del: 0.into(),
+            create_date: FastDateTime::now().set_micro(0).into(),
         }
     }
 }
