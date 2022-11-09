@@ -10,7 +10,7 @@ impl SysUserRoleService {
     /// 添加角色
     /// 部分代码与原工程不一致
     pub async fn add(&self, arg: UserRoleAddDTO) -> Result<u64> {
-        if (arg.user_id.is_none() || arg.role_id.is_none()) {
+        if arg.user_id.is_none() || arg.role_id.is_none() {
             return Err(Error::from("添加角色时用户和角色不能为空！"));
         }
         let user_id = arg.user_id.as_deref().unwrap().to_string();

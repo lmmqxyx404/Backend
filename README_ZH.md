@@ -33,7 +33,10 @@ ddd (领域驱动设计)
 2. 存储在数据库中的是密文
 3. 采用对称加密
 4. 后期会改进安全性
- 
+
+### 0.2.1 登陆时，会进行图形验证码验证
+引入 cache_service
+
 ### 后期考虑添加支持手机验证码登录
 
 ## 0.3 退出登录接口
@@ -65,3 +68,7 @@ impl service {
 }
 ```
 进而在一系列 services 之间共享。
+
+## 使用 From trait 时
+```impl From<> for struct_name```
+具体的implementation 在 struc_name 文档上
