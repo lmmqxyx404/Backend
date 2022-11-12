@@ -31,7 +31,10 @@ parking_lot = "0.12.1"
 # 封装异步 trait, 第一次用在 service::cache_service;
 futures-util = "0.3.21"
 
-#async trait
+# redis 用于缓存服务
+redis = { version = "0.21", features = ["tokio-comp"] }
+
+# async trait
 async-trait = "0.1"
 
 
