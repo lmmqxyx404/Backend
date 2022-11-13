@@ -1,6 +1,7 @@
 // use crate::domain::domain::SysUser;
 use crate::domain::dto::sign_in::SignDTO;
 use crate::domain::table::tables::SysUser;
+use crate::domain::table::LoginCheck;
 use crate::domain::vo::sign_in::SignVO;
 use crate::domain::vo::user::SysUserVO;
 
@@ -16,6 +17,7 @@ use crate::pool;
 
 // 引入CONTEXT
 use crate::service::CONTEXT;
+use crate::util::password_encoder::PasswordEncoder;
 /// 引入 Page
 use rbatis::sql::page::Page;
 use rbatis::sql::PageRequest;
@@ -41,15 +43,51 @@ impl SysUserService {
     /// 登录功能服务，被登录接口调用
     pub async fn sign_in(&self, arg: &SignDTO) -> Result<SignVO> {
         /// 防止爆破登录
+        let user = SysUser::select_by_column(pool!(), field_name!(SysUser.account), &arg.account)
+            .await?
+            .into_iter()
+            .next();
+        let user = user.ok_or_else(|| Error::from(format!("账号不存在: {}", arg.account)))?;
+        if user.state.eq(&Some(0)) {
+            return Err(Error::from("账户被封禁"));
+        }
         let mut error = None;
+        match user
+            .login_check
+            .as_ref()
+            // 暂时也不知道 unwrap_or 有什么用处
+            .unwrap_or(&LoginCheck::PasswordCheck)
+        {
+            LoginCheck::NoCheck => {}
+            LoginCheck::PasswordCheck => {
+                if !PasswordEncoder::verify(
+                    user.password
+                        .as_ref()
+                        .ok_or_else(|| Error::from("错误的用户数据，密码为空"))?,
+                    &arg.password,
+                ) {
+                    error = Some(Error::from("密码不正确"));
+                }
+            }
+            LoginCheck::PasswordImgCodeCheck => {
+                // 准备引入 cache_service
+                // let cache_code=CONTEXT.
+            }
+            LoginCheck::PhoneCodeCheck => {}
+        }
         if error.is_some() {
             /// 增加重试次数
             return Err(error.unwrap());
         }
-        let interimVO = SignVO {
-            user: Some(SignDTO {}),
+
+        Err(Error::from("build error"))
+        /* let interimVO = SignVO {
+            user: Some(SignDTO {
+
+            }),
         };
-        Ok(interimVO)
+
+        Ok(interimVO) */
     }
 
     ///  获得用户信息
@@ -63,7 +101,11 @@ impl SysUserService {
             .clone()
             .ok_or_else(|| Error::from("用户数据错误，id为空"))?;
         let interimVO = SignVO {
-            user: Some(SignDTO {}),
+            user: Some(SignDTO {
+                password: "asd".to_string(),
+                account: "asd".to_string(),
+                vcode: "asd".to_string(),
+            }),
         };
 
         // 上面是初步处理 SysUser 信息，与其余service进行隔离

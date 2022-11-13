@@ -17,6 +17,14 @@ mod sys_auth_service;
 /// 有普通用户，管理员，超级管理员，员工
 mod sys_user_role_service;
 
+/// 缓存服务
+mod cache_service;
+
+mod mem_service;
+
+mod redis_service;
+pub use mem_service::*;
+pub use redis_service::*;
 // pub mod sys_config_service;
 
 pub use sys_auth_service::*;
