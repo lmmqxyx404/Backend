@@ -36,7 +36,7 @@ impl ICacheService for RedisService {
         Box::pin(async move {
             let mut conn = self.get_conn().await?;
             let result: RedisResult<Option<String>> =
-                redis::cmd("GET").arg(&[&k]).query_async(&mut con).await;
+                redis::cmd("GET").arg(&[&k]).query_async(&mut conn).await;
             return match result {
                 Ok(v) => Ok(v.unwrap_or_default()),
                 Err(e) => Err(Error::from(format!(
@@ -87,16 +87,13 @@ impl ICacheService for RedisService {
         let k = k.to_string();
         Box::pin(async move {
             let mut conn = self.get_conn().await?;
-            Box::pin(async move {
-                let mut conn = self.get_conn().await?;
-                return match redis::cmd("TTL").arg(&[k]).query_async(&mut conn).await {
-                    Ok(v) => Ok(v),
-                    Err(e) => Err(Error::from(format!(
-                        "Redis serive ttl failed:{}",
-                        e.to_string()
-                    ))),
-                };
-            })
+            return match redis::cmd("TTL").arg(&[k]).query_async(&mut conn).await {
+                Ok(v) => Ok(v),
+                Err(e) => Err(Error::from(format!(
+                    "Redis serive ttl failed:{}",
+                    e.to_string()
+                ))),
+            };
         })
     }
 }

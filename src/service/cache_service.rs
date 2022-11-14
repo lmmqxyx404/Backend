@@ -33,4 +33,8 @@ impl CacheService {
             }
         }
     }
+
+    pub async fn get_string(&self, k: &str) -> Result<String> {
+        self.inner.get_string(k).await
+    }
 }

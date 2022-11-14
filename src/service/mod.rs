@@ -31,6 +31,8 @@ pub use sys_auth_service::*;
 pub use sys_user_role_service::*;
 pub use sys_user_service::*;
 
+/// 使用缓存服务
+use self::cache_service::CacheService;
 // service context 必须为 pub,否则 无法给上下文使用
 pub struct ServiceContext {
     // 2022年10月26日00点15分 添加 rbatis
@@ -38,6 +40,7 @@ pub struct ServiceContext {
     pub config: ApplicationConfig,
     pub sys_auth_service: SysAuthService,
     pub sys_user_service: SysUserService,
+    pub cache_service: CacheService,
 }
 
 impl Default for ServiceContext {
@@ -48,6 +51,7 @@ impl Default for ServiceContext {
         // 2. 生成 rbatis 实例
         let rbatis_instanece = crate::domain::init_rbatis(&config);
         ServiceContext {
+            cache_service: CacheService::new(&config).unwrap(),
             config: config,
             rbatis: rbatis_instanece,
             sys_auth_service: SysAuthService {},
@@ -57,6 +61,7 @@ impl Default for ServiceContext {
 }
 
 use rbdc_mysql::driver::MysqlDriver;
+
 impl ServiceContext {
     pub async fn init_pool(&self) {
         // 连接数据库
