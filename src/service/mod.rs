@@ -19,10 +19,12 @@ mod sys_user_role_service;
 
 /// 缓存服务
 mod cache_service;
-
 mod mem_service;
-
 mod redis_service;
+
+/// 角色服务
+mod sys_role_service;
+
 pub use mem_service::*;
 pub use redis_service::*;
 // pub mod sys_config_service;
@@ -32,7 +34,7 @@ pub use sys_user_role_service::*;
 pub use sys_user_service::*;
 
 /// 使用缓存服务
-use self::cache_service::CacheService;
+use self::{cache_service::CacheService, sys_role_service::SysRoleService};
 // service context 必须为 pub,否则 无法给上下文使用
 pub struct ServiceContext {
     // 2022年10月26日00点15分 添加 rbatis
@@ -41,6 +43,7 @@ pub struct ServiceContext {
     pub sys_auth_service: SysAuthService,
     pub sys_user_service: SysUserService,
     pub cache_service: CacheService,
+    pub sys_role_service: SysRoleService,
 }
 
 impl Default for ServiceContext {
@@ -56,6 +59,7 @@ impl Default for ServiceContext {
             rbatis: rbatis_instanece,
             sys_auth_service: SysAuthService {},
             sys_user_service: SysUserService {},
+            sys_role_service: SysRoleService {},
         }
     }
 }
