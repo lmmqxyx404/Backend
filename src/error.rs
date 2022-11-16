@@ -7,6 +7,7 @@ use serde::de::Visitor;
 use serde::ser::{Serialize, Serializer};
 use serde::{Deserialize, Deserializer};
 
+/// Global Result
 /// in service::sys_user, this would be uiseful
 pub type Result<T> = std::result::Result<T, Error>;
 
