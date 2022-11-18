@@ -25,6 +25,9 @@ mod redis_service;
 /// 角色服务
 mod sys_role_service;
 
+/// 手机信息验证码服务
+mod sys_sms_service;
+
 pub use mem_service::*;
 pub use redis_service::*;
 // pub mod sys_config_service;
@@ -34,7 +37,9 @@ pub use sys_user_role_service::*;
 pub use sys_user_service::*;
 
 /// 使用缓存服务
-use self::{cache_service::CacheService, sys_role_service::SysRoleService};
+use self::{
+    cache_service::CacheService, sys_role_service::SysRoleService, sys_sms_service::SysSmsService,
+};
 // service context 必须为 pub,否则 无法给上下文使用
 pub struct ServiceContext {
     // 2022年10月26日00点15分 添加 rbatis
@@ -44,6 +49,7 @@ pub struct ServiceContext {
     pub sys_user_service: SysUserService,
     pub cache_service: CacheService,
     pub sys_role_service: SysRoleService,
+    pub sys_sms_service: SysSmsService,
 }
 
 impl Default for ServiceContext {
@@ -60,6 +66,7 @@ impl Default for ServiceContext {
             sys_auth_service: SysAuthService {},
             sys_user_service: SysUserService {},
             sys_role_service: SysRoleService {},
+            sys_sms_service: SysSmsService {},
         }
     }
 }
