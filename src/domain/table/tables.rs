@@ -46,6 +46,16 @@ pub struct SysUserRole {
     pub create_date: Option<FastDateTime>,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Hash, Serialize, Deserialize)]
+pub struct SysRoleRes {
+    pub id: Option<String>,
+    /// 角色ID
+    pub role_id: Option<String>,
+    /// 资源ID
+    pub res_id: Option<String>,
+    pub create_date: Option<FastDateTime>,
+}
+
 mod test {
     use crate::domain::table::enums::LoginCheck;
 
