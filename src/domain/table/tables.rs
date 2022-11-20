@@ -56,6 +56,21 @@ pub struct SysRoleRes {
     pub create_date: Option<FastDateTime>,
 }
 
+/// 权限资源表
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SysRes {
+    pub id: Option<String>,
+    /// 父 ID ,可以为空
+    pub parent_id: Option<String>,
+    pub name: Option<String>,
+    /// 权限
+    pub permission: Option<String>,
+    /// 前端-菜单路径（路由路径）
+    pub path: Option<String>,
+    pub del: Option<i32>,
+    pub create_date: Option<FastDateTime>,
+}
+
 mod test {
     use crate::domain::table::enums::LoginCheck;
 
