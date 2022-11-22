@@ -28,6 +28,9 @@ mod sys_role_service;
 /// 手机信息验证码服务
 mod sys_sms_service;
 
+/// 系统执行的一些资源服务
+mod sys_res_service;
+
 pub use mem_service::*;
 pub use redis_service::*;
 // pub mod sys_config_service;
@@ -38,7 +41,8 @@ pub use sys_user_service::*;
 
 /// 使用缓存服务
 use self::{
-    cache_service::CacheService, sys_role_service::SysRoleService, sys_sms_service::SysSmsService,
+    cache_service::CacheService, sys_res_service::SysResService, sys_role_service::SysRoleService,
+    sys_sms_service::SysSmsService,
 };
 // service context 必须为 pub,否则 无法给上下文使用
 pub struct ServiceContext {
@@ -50,6 +54,7 @@ pub struct ServiceContext {
     pub cache_service: CacheService,
     pub sys_role_service: SysRoleService,
     pub sys_sms_service: SysSmsService,
+    pub sys_res_service: SysResService,
 }
 
 impl Default for ServiceContext {
@@ -67,6 +72,7 @@ impl Default for ServiceContext {
             sys_user_service: SysUserService {},
             sys_role_service: SysRoleService {},
             sys_sms_service: SysSmsService {},
+            sys_res_service: SysResService {},
         }
     }
 }
