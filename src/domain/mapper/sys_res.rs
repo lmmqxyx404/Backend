@@ -1,8 +1,8 @@
-use crate::table::tables::SysRes;
+use crate::domain::table::tables::SysRes;
 
 crud!(SysRes {});
 
-impl_select_page!(SysRes{select_page(dto:&crate::domain::dto::ResPageDTO) =>
+impl_select_page!(SysRes{select_page(dto:&crate::domain::dto::res::ResPageDTO) =>
 "`where del = 0 `
 if dto.name!=null && dto.name != '':
 ` and name like #{'%' + dto.name + '%'}`
@@ -14,7 +14,7 @@ impl_select!(SysRes{select_by_permission_or_name(permission:&str,name:&str)=>"`w
 
 impl_select!(SysRes{select_by_ids(ids:&Vec<String>)=>
     "`where id in (`
-        trim ",": for _,id in ids:
+        trim ',': for _,id in ids:
         #{id},
     `)`"});
 
