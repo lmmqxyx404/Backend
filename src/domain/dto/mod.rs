@@ -6,6 +6,9 @@ pub mod sign_in;
 /// 用户模块
 pub mod user;
 
+/// 资源模块
+pub mod res;
+
 use serde::{Deserialize, Serialize};
 
 // 后续可能会移动IdDTO
