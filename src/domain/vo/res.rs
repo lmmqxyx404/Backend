@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use rbatis::rbdc::datetime::FastDateTime;
 use serde::{Deserialize, Serialize};
 
@@ -27,6 +29,37 @@ impl From<SysRes> for SysResVO {
             del: arg.del,
             create_date: arg.create_date,
             childs: None,
+        }
+    }
+}
+
+impl SysResVO {
+    pub fn get_father_id(&self) -> &Option<String> {
+        &self.parent_id
+    }
+
+    pub fn set_childs_recursive(&mut self, all_record: &HashMap<String, Self>) {
+        let mut childs: Option<Vec<Self>> = None;
+        if self.id.is_some() {
+            for (key, val) in all_record {
+                if val.get_father_id().is_some() && self.id.eq(&val.get_father_id()) {
+                    let mut item = val.clone();
+                    item.set_childs_recursive(all_record);
+                    match &mut childs {
+                        Some(childs) => {
+                            childs.push(item);
+                        }
+                        None => {
+                            let mut vec = vec![];
+                            vec.push(item);
+                            childs = Some(vec);
+                        }
+                    }
+                }
+            }
+        }
+        if childs.is_some() {
+            self.childs = Some(childs.unwrap());
         }
     }
 }
