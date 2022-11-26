@@ -7,6 +7,9 @@ pub mod user;
 /// res vo
 pub mod res;
 
+/// roles
+pub mod role;
+
 use serde::de::DeserializeOwned;
 use serde::{Deserialize, Serialize};
 
