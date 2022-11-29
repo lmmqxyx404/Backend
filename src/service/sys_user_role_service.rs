@@ -1,4 +1,7 @@
+use std::collections::BTreeMap;
+
 use crate::domain::dto::user::UserRoleAddDTO;
+use crate::domain::vo::res::SysResVO;
 use crate::error::{Error, Result};
 
 use crate::domain::table::tables::SysUserRole;
@@ -42,7 +45,11 @@ impl SysUserRoleService {
     }
 
     /// 查找指定的角色(依据 user_id，找出对应权限的 role )
-    pub async fn find_user_role(&self) -> Result<u64> {
+    pub async fn find_user_role(
+        &self,
+        user_id: &str,
+        all_res: &BTreeMap<String, SysResVO>,
+    ) -> Result<Option<SysResVO>> {
         Err(Error::from("未完全实现"))
     }
 }

@@ -55,6 +55,7 @@ pub struct ServiceContext {
     pub sys_role_service: SysRoleService,
     pub sys_sms_service: SysSmsService,
     pub sys_res_service: SysResService,
+    pub sys_user_role_service: SysUserRoleService,
 }
 
 impl Default for ServiceContext {
@@ -73,6 +74,7 @@ impl Default for ServiceContext {
             sys_role_service: SysRoleService {},
             sys_sms_service: SysSmsService {},
             sys_res_service: SysResService {},
+            sys_user_role_service: SysUserRoleService {},
         }
     }
 }
