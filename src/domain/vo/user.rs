@@ -3,6 +3,8 @@ use serde::{Deserialize, Serialize};
 use crate::domain::table::{LoginCheck, SysUser};
 /// 4.0 之后的 rabatis 才支持
 use rbatis::rbdc::datetime::FastDateTime;
+
+use super::role::SysRoleVO;
 // use crate::domain::dto::sign_in::SignDTO;
 /// 后台用户
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -15,7 +17,8 @@ pub struct SysUserVO {
     pub state: Option<i32>,
     pub del: Option<i32>,
     pub create_date: Option<FastDateTime>,
-    pub role: Option<String>,
+    /// 注意类型
+    pub role: Option<SysRoleVO>,
 }
 
 impl From<SysUser> for SysUserVO {
