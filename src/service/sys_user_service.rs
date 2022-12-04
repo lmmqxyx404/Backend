@@ -2,6 +2,7 @@
 use crate::domain::dto::sign_in::SignDTO;
 use crate::domain::table::tables::SysUser;
 use crate::domain::table::LoginCheck;
+use crate::domain::vo::res::SysResVO;
 use crate::domain::vo::sign_in::SignVO;
 use crate::domain::vo::user::SysUserVO;
 
@@ -21,6 +22,9 @@ use crate::util::password_encoder::PasswordEncoder;
 /// 引入 Page
 use rbatis::sql::page::Page;
 use rbatis::sql::PageRequest;
+
+/// 引入BTREE
+use std::collections::BTreeMap;
 /// 绝大多数DTO映射成VO
 pub struct SysUserService {}
 
@@ -71,7 +75,21 @@ impl SysUserService {
             }
             LoginCheck::PasswordImgCodeCheck => {
                 // 准备引入 cache_service
-                // let cache_code=CONTEXT.
+                let cache_code = CONTEXT
+                    .cache_service
+                    .get_string(&format!("cpatch:account_{}", &arg.account))
+                    .await?;
+                if cache_code.eq(&arg.vcode) {
+                    error = Some(Error::from("验证码不正确！"))
+                }
+                if !PasswordEncoder::verify(
+                    user.password
+                        .as_ref()
+                        .ok_or_else(|| Error::from("错误的用户数据，密码为空"))?,
+                    &arg.password,
+                ) {
+                    error = Some(Error::from("密码不正确！"))
+                }
             }
             LoginCheck::PhoneCodeCheck => {}
         }
@@ -79,8 +97,9 @@ impl SysUserService {
             /// 增加重试次数
             return Err(error.unwrap());
         }
-
-        Err(Error::from("build error"))
+        let sign_in_vo = self.get_user_info(&user).await?;
+        Ok(sign_in_vo)
+        // Err(Error::from("build error"))
         /* let interimVO = SignVO {
             user: Some(SignDTO {
 
@@ -126,13 +145,26 @@ impl SysUserService {
     /// 用户详情
     pub async fn detail(&self, arg: &IdDTO) -> Result<SysUserVO> {
         let user_id = arg.id.as_deref().unwrap_or_default();
-        Err(Error::E("接口暂时没有实现".to_string()))
+        let user = self
+            .find(&user_id)
+            .await?
+            .ok_or_else(|| Error::from(format!("用户{:?} 不存在", user_id)))?;
+        let mut user_vo = SysUserVO::from(user);
+        // 下面的finds_all_map
+        let all_res = CONTEXT.sys_res_service.finds_all_map().await?;
+        let role = CONTEXT
+            .sys_user_role_service
+            .find_user_role(&user_id, &all_res)
+            .await?;
+        user_vo.role = role;
+        Ok(user_vo)
+        // Err(Error::E("接口暂时没有实现".to_string()))
     }
 
     /// 根据用户id查找user
-    pub async fn find(&self, id: &str) -> Result<Option<SysUser>> {
+    pub async fn find(&self, user_id: &str) -> Result<Option<SysUser>> {
         Ok(
-            SysUser::select_by_column(pool!(), field_name!(SysUser.id), id)
+            SysUser::select_by_column(pool!(), field_name!(SysUser.id), user_id)
                 .await?
                 .into_iter()
                 .next(),
@@ -200,5 +232,17 @@ impl SysUserService {
     /// 删除用户信息
     pub async fn remove_user_info(&self) -> Result<()> {
         Ok(())
+    }
+
+    /// 查找用户-权限
+    pub async fn load_level_permission(
+        &self,
+        user_id: &str,
+        all_res: &BTreeMap<String, SysResVO>,
+    ) -> Result<Vec<String>> {
+        CONTEXT
+            .sys_role_service
+            .find_user_permission(user_id, all_res)
+            .await
     }
 }

@@ -5,6 +5,8 @@ use crate::domain::table::SysRole;
 
 use super::res::SysResVO;
 
+
+/// 角色VO
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct SysRoleVO {
     pub id: Option<String>,

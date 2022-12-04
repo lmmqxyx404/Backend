@@ -69,7 +69,7 @@ impl SysResService {
         let num = SysRes::delete_by_column(pool!(), "id", id)
             .await?
             .rows_affected;
-        
+
         Err(Error::from("_"))
     }
 
@@ -108,6 +108,20 @@ impl SysResService {
         }
         Ok(arr)
         //Err(Error::from("temporary"))
+    }
+
+    pub fn make_res_ids(&self, args: &Vec<SysResVO>) -> Vec<String> {
+        let mut ids = vec![];
+        for x in args {
+            ids.push(x.id.as_deref().unwrap_or_default().to_string());
+            if let Some(childs) = &x.childs {
+                let child_ids = rbatis::make_table_field_vec!(childs, id);
+                for child_id in child_ids {
+                    ids.push(child_id);
+                }
+            }
+        }
+        ids
     }
 
     pub async fn finds_all_map(&self) -> Result<BTreeMap<String, SysResVO>> {

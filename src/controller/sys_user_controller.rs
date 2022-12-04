@@ -6,6 +6,7 @@ use crate::error::Error;
 
 use crate::service::CONTEXT;
 
+use crate::domain::dto::IdDTO;
 /// 用户登录
 pub async fn login(arg: web::Json<SignDTO>) -> impl Responder {
     // let login_vo = Err("empty account");
@@ -28,8 +29,8 @@ pub async fn user_info(req: HttpRequest) -> impl Responder {
     }
 }
 
-/* 用户详情接口  暂时未实现
-pub async fn user_detail(arg: web::Json<IdDTO>) -> impl Responder{
-
+/// 用户详情接口  暂时未实现
+pub async fn user_detail(arg: web::Json<IdDTO>) -> impl Responder {
+    let vo = CONTEXT.sys_user_service.detail(&arg.0).await;
+    RespVO::from_result(&vo).resp_json()
 }
-*/
