@@ -34,3 +34,8 @@ pub async fn user_detail(arg: web::Json<IdDTO>) -> impl Responder {
     let vo = CONTEXT.sys_user_service.detail(&arg.0).await;
     RespVO::from_result(&vo).resp_json()
 }
+
+/// 修改用户信息
+pub async fn user_update() -> impl Responder {
+    // return ;
+}
