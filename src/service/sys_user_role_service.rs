@@ -80,7 +80,7 @@ impl SysUserRoleService {
             }
             let mut vo = SysRoleVO::from(role);
             vo.resource_ids = CONTEXT.sys_res_service.make_res_ids(&resources);
-            vo.resource_ids = resources;
+            vo.resources = resources;
             role_vo.push(vo);
         }
         if role_vo.is_empty() {

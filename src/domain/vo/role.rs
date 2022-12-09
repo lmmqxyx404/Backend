@@ -5,7 +5,6 @@ use crate::domain::table::SysRole;
 
 use super::res::SysResVO;
 
-
 /// 角色VO
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct SysRoleVO {
@@ -18,6 +17,21 @@ pub struct SysRoleVO {
     pub resources: Vec<SysResVO>,
     pub childs: Option<Vec<SysRoleVO>>,
     pub resource_ids: Vec<String>,
+}
+
+impl From<SysRole> for SysRoleVO {
+    fn from(arg: SysRole) -> Self {
+        Self {
+            id: arg.id,
+            name: arg.name,
+            parent_id: arg.parent_id,
+            del: arg.del,
+            create_date: arg.create_date,
+            resources: vec![],
+            childs: None,
+            resource_ids: vec![],
+        }
+    }
 }
 
 impl SysRoleVO {
