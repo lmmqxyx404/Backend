@@ -50,3 +50,30 @@ impl From<&UserPageDTO> for PageRequest {
         PageRequest::new(arg.page_no.unwrap_or(1), arg.page_size.unwrap_or(10))
     }
 }
+
+/// 编辑用户信息
+pub struct UserEditDTO {
+    pub id: Option<String>,
+    /// 邮箱登录|手机号登录
+    pub account: Option<String>,
+    pub password: Option<String>,
+    pub name: Option<String>,
+    pub state: Option<i32>,
+    pub login_check: Option<LoginCheck>,
+    pub role_id: Option<String>,
+}
+
+impl From<UserEditDTO> for SysUser {
+    fn from(arg: UserEditDTO) -> Self {
+        SysUser {
+            id: arg.id,
+            account: arg.account,
+            password: arg.password,
+            login_check: arg.login_check,
+            name: arg.name,
+            state: arg.state,
+            del: None,
+            create_date: None,
+        }
+    }
+}

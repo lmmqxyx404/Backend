@@ -8,7 +8,7 @@ use crate::domain::vo::user::SysUserVO;
 
 use crate::domain::dto::IdDTO;
 // 引入UserAddDTO
-use crate::domain::dto::user::{UserAddDTO, UserPageDTO};
+use crate::domain::dto::user::{UserAddDTO, UserEditDTO, UserPageDTO, UserRoleAddDTO};
 /// use error module Result.
 use crate::error::{Error, Result};
 
@@ -225,8 +225,32 @@ impl SysUserService {
     }
 
     /// 修改用户信息
-    pub async fn edit_user_info(&self) -> Result<()> {
-        Ok(())
+    pub async fn edit_user_info(&self, arg: UserEditDTO) -> Result<u64> {
+        let role_id = arg.role_id.clone();
+        let mut user = SysUser::from(arg);
+        user.account = None;
+        let mut password = None;
+
+        if user.password.is_some() {
+            password = Some(PasswordEncoder::encode(user.password.as_ref().unwrap()));
+        }
+        user.password = password;
+        if role_id.is_some() {
+            CONTEXT
+                .sys_user_role_service
+                .add(UserRoleAddDTO {
+                    id: None,
+                    user_id: user.id.clone(),
+                    role_id: role_id,
+                })
+                .await?;
+        }
+        Ok(
+            SysUser::update_by_column(pool!(), &user, field_name!(SysUser.id))
+                .await?
+                .rows_affected,
+        )
+        //Ok(32 as u64)
     }
 
     /// 删除用户信息
