@@ -6,7 +6,7 @@ impl PasswordEncoder {
         let encode_str = md5::compute(raw_password);
         format!("{:x}", encode_str)
     }
-    
+
     // 验证密码
     pub fn verify(password: &str, raw_password: &str) -> bool {
         if password.eq(raw_password) {

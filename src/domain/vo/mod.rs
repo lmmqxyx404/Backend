@@ -1,11 +1,11 @@
 /// jwt_token vo
 pub mod jwt;
+/// res vo
+pub mod res;
 /// sign in vo
 pub mod sign_in;
 /// user vo
 pub mod user;
-/// res vo
-pub mod res;
 
 /// roles
 pub mod role;
