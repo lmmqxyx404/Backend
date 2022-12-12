@@ -9,6 +9,9 @@ pub mod user;
 /// 资源模块
 pub mod res;
 
+/// 角色模块
+pub mod role;
+
 use serde::{Deserialize, Serialize};
 
 // 后续可能会移动IdDTO
