@@ -1,7 +1,7 @@
 use actix_web::{web, HttpRequest, Responder};
 
 use crate::domain::dto::sign_in::SignDTO;
-use crate::domain::dto::user::UserEditDTO;
+use crate::domain::dto::user::{UserAddDTO, UserEditDTO};
 use crate::domain::vo::RespVO;
 use crate::error::Error;
 
@@ -39,5 +39,20 @@ pub async fn user_detail(arg: web::Json<IdDTO>) -> impl Responder {
 /// 修改用户信息
 pub async fn user_update(arg: web::Json<UserEditDTO>) -> impl Responder {
     let vo = CONTEXT.sys_user_service.edit_user_info(arg.0).await;
+    return RespVO::from_result(&vo).resp_json();
+}
+
+/// 添加用户
+pub async fn user_add(arg: web::Json<UserAddDTO>) -> impl Responder {
+    let vo = CONTEXT.sys_user_service.add(arg.0).await;
+    return RespVO::from_result(&vo).resp_json();
+}
+
+/// 删除用户
+pub async fn user_remove(arg: web::Json<IdDTO>) -> impl Responder {
+    let vo = CONTEXT
+        .sys_user_service
+        .remove(&arg.0.id.unwrap_or_default())
+        .await;
     return RespVO::from_result(&vo).resp_json();
 }

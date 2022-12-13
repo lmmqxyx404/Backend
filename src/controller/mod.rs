@@ -7,3 +7,6 @@ pub mod sys_user_controller;
 
 /// 校验 check 接口
 pub mod sys_auth_controller;
+
+/// 角色初始化接口
+pub mod sys_role_controller;
