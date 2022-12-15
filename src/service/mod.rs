@@ -31,6 +31,9 @@ mod sys_sms_service;
 /// 系统执行的一些资源服务
 mod sys_res_service;
 
+/// 垃圾桶服务
+mod sys_trash_service;
+
 pub use mem_service::*;
 pub use redis_service::*;
 // pub mod sys_config_service;
