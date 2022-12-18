@@ -14,4 +14,5 @@ And the aim of this project is to be a tutorial for people who are insterested i
 # Main technology
  - actix-web
  - rbatis-orm
-
+ - mysql
+ - redis
