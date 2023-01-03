@@ -81,6 +81,14 @@ pub struct SysRole {
     pub create_date: Option<FastDateTime>,
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SysTrash {
+    pub id: Option<String>,
+    pub table_name: Option<String>,
+    pub date: Option<String>,
+    pub create_date: Option<FastDateTime>,
+}
+
 mod test {
     use crate::domain::table::enums::LoginCheck;
 
