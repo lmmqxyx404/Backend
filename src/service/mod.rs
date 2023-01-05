@@ -25,6 +25,9 @@ mod redis_service;
 /// 角色服务
 mod sys_role_service;
 
+/// 系统角色-权限资源服务
+mod sys_role_res_service;
+
 /// 手机信息验证码服务
 mod sys_sms_service;
 
