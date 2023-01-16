@@ -9,3 +9,7 @@ pub async fn page(arg: web::Json<SysRoleResPageDTO>) -> impl Responder {
     return RespVO::<()>::from_error(&Error::from("access token"), "-10").resp_json();
     // let vo=CONTEXT.sys_role_service
 }
+
+pub async fn add(arg: web::Json<SysRoleResPageDTO>) -> impl Responder {
+    return RespVO::<()>::from_error(&Error::from("access token"), "-10").resp_json();
+}
