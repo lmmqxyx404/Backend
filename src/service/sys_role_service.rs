@@ -38,6 +38,19 @@ impl SysRoleService {
         Ok(page)
     }
 
+    pub async fn finds_layer(&self) -> Result<Vec<SysRoleVO>> {
+        let all = self.finds_all_map().await?;
+        let mut data = vec![];
+        for (k, v) in &all {
+            if v.parent_id.is_none() {
+                let mut top = SysRoleVO::from(v.clone());
+                self.loop_find_childs(&mut top, &all);
+                data.push(top);
+            }
+        }
+        Ok(data)
+        // Err(Error::from("hello"))
+    }
     pub async fn finds_all_map(&self) -> Result<HashMap<String, SysRole>> {
         let all = self.finds_all().await?;
         let mut result = HashMap::with_capacity(all.capacity());
@@ -79,6 +92,21 @@ impl SysRoleService {
             return Ok(vec![]);
         }
         Ok(SysRole::select_list_by_ids(pool!(), ids).await?)
+        // Err(Error::from("hello"))
+    }
+
+    pub async fn loop_find_childs(&self, arg: &mut SysRoleVO, all: &HashMap<String, SysRole>) {
+        let mut children = vec![];
+        for (k, v) in all {
+            if v.parent_id.is_some() && v.parent_id.eq(&arg.id) {
+                let mut item = SysRoleVO::from(v.clone());
+                self.loop_find_childs(&mut item, all);
+                children.push(item)
+            }
+        }
+        if !children.is_empty() {
+            arg.childs = Some(children);
+        }
         // Err(Error::from("hello"))
     }
 }
