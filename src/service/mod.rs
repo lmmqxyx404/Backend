@@ -47,7 +47,8 @@ pub use sys_user_service::*;
 
 /// 使用缓存服务
 use self::{
-    cache_service::CacheService, sys_res_service::SysResService, sys_role_service::SysRoleService,
+    cache_service::CacheService, sys_res_service::SysResService,
+    sys_role_res_service::SysRoleResService, sys_role_service::SysRoleService,
     sys_sms_service::SysSmsService,
 };
 // service context 必须为 pub,否则 无法给上下文使用
@@ -62,6 +63,7 @@ pub struct ServiceContext {
     pub sys_sms_service: SysSmsService,
     pub sys_res_service: SysResService,
     pub sys_user_role_service: SysUserRoleService,
+    pub sys_role_res_service: SysRoleResService,
 }
 
 impl Default for ServiceContext {
@@ -81,6 +83,8 @@ impl Default for ServiceContext {
             sys_sms_service: SysSmsService {},
             sys_res_service: SysResService {},
             sys_user_role_service: SysUserRoleService {},
+            // 2023年1月18日23点49分
+            sys_role_res_service: SysRoleResService {},
         }
     }
 }
