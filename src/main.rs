@@ -33,6 +33,11 @@ async fn main() -> std::io::Result<()> {
                 "/admin/sys_login",
                 web::post().to(sys_user_controller::login),
             )
+            // 获取用户信息接口
+            .route(
+                "/admin/sys_user_info",
+                web::post().to(sys_user_controller::user_info),
+            )
     })
     .bind("127.0.0.1:8001")?
     .run()
