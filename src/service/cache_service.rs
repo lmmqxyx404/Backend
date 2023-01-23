@@ -21,7 +21,7 @@ impl CacheService {
         match cfg.cache_type.as_str() {
             "mem" => {
                 println!("[backend] cache type: mem");
-                panic!("hello");
+                // panic!("hello");
                 Ok(Self {
                     inner: Box::new(MemService::default()),
                 })
