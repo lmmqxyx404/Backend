@@ -2,6 +2,7 @@
 use crate::domain::dto::sign_in::SignDTO;
 use crate::domain::table::tables::SysUser;
 use crate::domain::table::LoginCheck;
+use crate::domain::vo::jwt::JWT_Token;
 use crate::domain::vo::res::SysResVO;
 use crate::domain::vo::sign_in::SignVO;
 use crate::domain::vo::user::SysUserVO;
@@ -47,10 +48,12 @@ impl SysUserService {
     /// 登录功能服务，被登录接口调用
     pub async fn sign_in(&self, arg: &SignDTO) -> Result<SignVO> {
         /// 防止爆破登录
+        println!("sign in {:?}",arg);
         let user = SysUser::select_by_column(pool!(), field_name!(SysUser.account), &arg.account)
             .await?
             .into_iter()
             .next();
+        println!("{:?}",user);
         let user = user.ok_or_else(|| Error::from(format!("账号不存在: {}", arg.account)))?;
         if user.state.eq(&Some(0)) {
             return Err(Error::from("账户被封禁"));
@@ -133,7 +136,13 @@ impl SysUserService {
     }
 
     /// 通过token登录
-    pub async fn get_user_info_by_token(&self, user: &SysUser) -> Result<SignVO> {
+    pub async fn get_user_info_by_token(&self, token: &JWT_Token) -> Result<SignVO> {
+        let user = SysUser::select_by_column(pool!(), field_name!(SysUser.id), &token.id)
+            .await?
+            .into_iter()
+            .next();
+        let user =
+            user.ok_or_else(|| Error::from(format!("account {} is not exist", token.account)))?;
         return self.get_user_info(&user).await;
     }
 
