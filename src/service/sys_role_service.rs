@@ -1,9 +1,6 @@
 use std::collections::{BTreeMap, HashMap};
 
-use rbatis::{
-    intercept::SqlIntercept,
-    sql::{Page, PageRequest},
-};
+use rbatis::sql::{Page, PageRequest};
 
 use crate::{
     domain::{
@@ -32,9 +29,9 @@ impl SysRoleService {
         .await?;
         let all_roles = self.finds_all_map().await?;
         let mut page = Page::<SysRoleVO>::from(data);
-        /* for mut vo in &mut page.records{
-            self.loop
-        } */
+        for mut vo in &mut page.records {
+            self.loop_find_childs(&mut vo, &all_roles);
+        }
         Ok(page)
     }
 
@@ -51,6 +48,18 @@ impl SysRoleService {
         Ok(data)
         // Err(Error::from("hello"))
     }
+
+    /// 查找 role 数组
+    pub async fn finds_all(&self) -> Result<Vec<SysRole>> {
+        // 查找的数据缓存于 Redis, 同时 remove, edit方法调用时刷新redis缓存
+        let js = CONTEXT
+            .cache_service
+            .get_json::<Option<Vec<SysRole>>>(RES_KEY)
+            .await;
+        return Ok(js?.unwrap_or_default());
+    }
+
+    /// 所有用户Id-用户Map数据
     pub async fn finds_all_map(&self) -> Result<HashMap<String, SysRole>> {
         let all = self.finds_all().await?;
         let mut result = HashMap::with_capacity(all.capacity());
@@ -60,13 +69,13 @@ impl SysRoleService {
         Ok(result)
     }
 
-    pub async fn finds_all(&self) -> Result<Vec<SysRole>> {
-        let js = CONTEXT
-            .cache_service
-            .get_json::<Option<Vec<SysRole>>>(RES_KEY)
-            .await;
-        return Ok(js?.unwrap_or_default());
+    /// 更新所有
+    pub async fn update_cache(&self) -> Result<Vec<SysRole>> {
+        let all = SysRole::select_all(pool!()).await?;
+        CONTEXT.cache_service.set_json(RES_KEY, &all).await?;
+        Ok(all)
     }
+
     pub async fn find_role_res(&self, ids: &Vec<String>) -> Result<Vec<SysRoleRes>> {
         if ids.is_empty() {
             return Ok(vec![]);
