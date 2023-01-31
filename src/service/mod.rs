@@ -94,7 +94,7 @@ use rbdc_mysql::driver::MysqlDriver;
 impl ServiceContext {
     pub async fn init_pool(&self) {
         // 连接数据库
-        println!("hello world");
+        // println!("hello world");
         println!("[backend] rbatis pool init ({})", &self.config.database_url);
         let res = self.rbatis.init(MysqlDriver {}, &self.config.database_url);
         if res.is_ok() {

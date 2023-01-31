@@ -8,7 +8,7 @@
  */
 use actix_web::{web, App, HttpResponse, HttpServer, Responder};
 
-use backend::controller::{img_verify_controller, sys_user_controller};
+use backend::{controller::{img_verify_controller, sys_user_controller}, service::CONTEXT};
 async fn index() -> impl Responder {
     HttpResponse::Ok().body("[backend] Hello world!")
 }
@@ -18,6 +18,8 @@ async fn main() -> std::io::Result<()> {
     // 1. 大型后端项目需要首先记录日志
 
     // 2. 选择连接数据库
+    // 切记，一定要连接数据库
+    CONTEXT.init_pool().await;
     // 3. 启动路由服务
     // 3.1 首先创建服务器实例App::new()
     HttpServer::new(|| {
@@ -39,7 +41,7 @@ async fn main() -> std::io::Result<()> {
                 web::post().to(sys_user_controller::user_info),
             )
     })
-    .bind("127.0.0.1:8001")?
+    .bind("127.0.0.1:8000")?
     .run()
     .await
 }
