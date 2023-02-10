@@ -124,7 +124,14 @@ impl SysResService {
         ids
     }
 
+    /// 登陆的时候，就需要用
     pub async fn finds_all_map(&self) -> Result<BTreeMap<String, SysResVO>> {
-        Err(Error::from("temporary"))
+        let all = self.finds_all().await?;
+        let mut result = BTreeMap::new();
+        for x in all {
+            result.insert(x.id.as_deref().unwrap_or_default().to_string(), x);
+        }
+        Ok(result)
+        // Err(Error::from("temporary"))
     }
 }
