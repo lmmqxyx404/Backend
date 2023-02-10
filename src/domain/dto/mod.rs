@@ -12,6 +12,8 @@ pub mod res;
 /// 角色模块
 pub mod role;
 
+pub mod dict;
+
 use serde::{Deserialize, Serialize};
 
 // 后续可能会移动IdDTO
