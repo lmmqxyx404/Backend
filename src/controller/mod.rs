@@ -10,3 +10,6 @@ pub mod sys_auth_controller;
 
 /// 角色初始化接口
 pub mod sys_role_controller;
+
+/// 系统字典接口
+pub mod sys_dict_controller;
