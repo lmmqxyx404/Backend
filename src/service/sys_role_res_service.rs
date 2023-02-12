@@ -4,7 +4,7 @@ use rbatis::sql::Page;
 
 use crate::{
     domain::{
-        dto::role::{RolePageDTO, SysRoleResPageDTO},
+        dto::role::{RoleAddDTO, RolePageDTO, SysRoleResAddDTO, SysRoleResPageDTO},
         table::SysRoleRes,
         vo::{res::SysResVO, role::SysRoleVO},
     },
@@ -33,7 +33,18 @@ impl SysRoleResService {
     }
 
     /// 添加角色资源
-    //pub async fn add(&self,arg: &)
+    pub async fn add(&self, arg: &SysRoleResAddDTO) -> Result<u64> {
+        let (_, role_id) = CONTEXT
+            .sys_role_service
+            .add_role(RoleAddDTO::from(arg.clone()))
+            .await?;
+        Err(Error::from("zan wei wancheng"))
+    }
+
+    /// 保存所有资源
+    async fn save_role_res(&self, role_id: &str, resource_ids: Vec<String>) -> Result<u64> {
+        Err(Error::from("zan wei wancheng"))
+    }
 
     /// 添加资源
     fn loop_set_res_vec(
@@ -76,5 +87,11 @@ impl SysRoleResService {
         arg: &Vec<SysRoleVO>,
     ) -> Result<HashMap<String, HashSet<SysRoleRes>>> {
         Err(Error::from("zan wei wancheng"))
+    }
+
+    /// 删除角色资源（依据role_id）
+    pub async fn remove_by_role_id(&self, role_id: &str) -> Result<u64> {
+        Err(Error::from("zan wei wancheng"))
+        // Ok(SysRoleRes)
     }
 }

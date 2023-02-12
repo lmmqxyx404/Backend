@@ -4,7 +4,10 @@ use rbatis::sql::{Page, PageRequest};
 
 use crate::{
     domain::{
-        dto::{res, role::RolePageDTO},
+        dto::{
+            res,
+            role::{RoleAddDTO, RolePageDTO},
+        },
         table::{SysRole, SysRoleRes, SysUserRole},
         vo::{res::SysResVO, role::SysRoleVO},
     },
@@ -117,5 +120,17 @@ impl SysRoleService {
             arg.childs = Some(children);
         }
         // Err(Error::from("hello"))
+    }
+
+    /// 角色添加
+    pub async fn add_role(&self, arg: RoleAddDTO) -> Result<(u64, String)> {
+        let mut role = SysRole::from(arg);
+        let result = (
+            SysRole::insert(pool!(), &role).await?.rows_affected,
+            role.id.clone().unwrap(),
+        );
+
+        self.update_cache().await?;
+        Ok(result)
     }
 }
