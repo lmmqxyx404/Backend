@@ -1,7 +1,7 @@
 use actix_web::{web, HttpRequest, Responder};
 
 use crate::domain::dto::sign_in::SignDTO;
-use crate::domain::dto::user::{UserAddDTO, UserEditDTO};
+use crate::domain::dto::user::{UserAddDTO, UserEditDTO, UserRolePageDTO};
 use crate::domain::vo::jwt::JWT_Token;
 use crate::domain::vo::RespVO;
 use crate::error::Error;
@@ -54,6 +54,7 @@ pub async fn user_update(arg: web::Json<UserEditDTO>) -> impl Responder {
 }
 
 /// 添加用户
+/// 完成（2023年2月12日21点09分）
 pub async fn user_add(arg: web::Json<UserAddDTO>) -> impl Responder {
     let vo = CONTEXT.sys_user_service.add(arg.0).await;
     return RespVO::from_result(&vo).resp_json();
@@ -65,5 +66,11 @@ pub async fn user_remove(arg: web::Json<IdDTO>) -> impl Responder {
         .sys_user_service
         .remove(&arg.0.id.unwrap_or_default())
         .await;
+    return RespVO::from_result(&vo).resp_json();
+}
+
+/// 用户分页
+pub async fn user_page(arg: web::Json<UserRolePageDTO>) -> impl Responder {
+    let vo = CONTEXT.sys_user_role_service.page(&arg.0).await;
     return RespVO::from_result(&vo).resp_json();
 }

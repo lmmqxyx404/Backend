@@ -1,9 +1,12 @@
 use std::collections::BTreeMap;
 
-use crate::domain::dto::user::UserRoleAddDTO;
+use rbatis::sql::Page;
+
+use crate::domain::dto::user::{UserPageDTO, UserRoleAddDTO, UserRolePageDTO};
 use crate::domain::table::SysRole;
 use crate::domain::vo::res::SysResVO;
 use crate::domain::vo::role::SysRoleVO;
+use crate::domain::vo::user::SysUserVO;
 use crate::error::{Error, Result};
 
 use crate::domain::table::tables::SysUserRole;
@@ -15,6 +18,21 @@ use super::CONTEXT;
 pub struct SysUserRoleService {}
 
 impl SysUserRoleService {
+    /// 角色分页
+    pub async fn page(&self, arg: &UserRolePageDTO) -> Result<Page<SysUserVO>> {
+        let mut vo = CONTEXT
+            .sys_user_service
+            .page(&UserPageDTO::from(arg))
+            .await?;
+        // 暂时还不知道下面这一部分代码的含义
+        /* if arg.resp_set_role.unwrap_or(true) {
+            let all_role = CONTEXT.sys_role_service.finds_all_map().await?;
+            // let user_ids
+        } */
+        Ok(vo)
+        // Err(Error::from("未完全实现"))
+    }
+
     /// 添加角色
     /// 部分代码与原工程不一致
     pub async fn add(&self, arg: UserRoleAddDTO) -> Result<u64> {

@@ -51,6 +51,18 @@ impl From<&UserPageDTO> for PageRequest {
     }
 }
 
+/// 实现 UserRolePageDTO --> UserPageDTO
+impl From<&UserRolePageDTO> for UserPageDTO {
+    fn from(arg: &UserRolePageDTO) -> Self {
+        Self {
+            page_no: arg.page_no.clone(),
+            page_size: arg.page_size.clone(),
+            account: arg.account.clone(),
+            name: arg.name.clone(),
+        }
+    }
+}
+
 /// 编辑用户信息
 pub struct UserEditDTO {
     pub id: Option<String>,
@@ -75,5 +87,22 @@ impl From<UserEditDTO> for SysUser {
             del: None,
             create_date: None,
         }
+    }
+}
+
+/// 用户角色分页
+pub struct UserRolePageDTO {
+    pub page_no: Option<u64>,
+    pub page_size: Option<u64>,
+    pub account: Option<String>,
+    pub name: Option<String>,
+
+    // 默认添加 role
+    pub resp_set_role: Option<bool>,
+}
+
+impl From<UserRolePageDTO> for PageRequest {
+    fn from(value: UserRolePageDTO) -> Self {
+        PageRequest::new(value.page_no.unwrap_or(1), value.page_size.unwrap_or(10))
     }
 }
