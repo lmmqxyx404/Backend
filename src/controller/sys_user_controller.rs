@@ -14,7 +14,7 @@ pub async fn login(arg: web::Json<SignDTO>) -> impl Responder {
     // let login_vo = Err("empty account");
     // 之后要打印日志
     let vo = CONTEXT.sys_user_service.sign_in(&arg.0).await;
-    println!("get info vo {:?}",vo);
+    println!("get info vo {:?}", vo);
     return RespVO::from_result(&vo).resp_json();
     // return RespVO::<()>::from_error(&Error::from("empty account"), "-1").resp_json();
 }
@@ -34,6 +34,7 @@ pub async fn user_info(req: HttpRequest) -> impl Responder {
                 .get_user_info_by_token(&token.unwrap())
                 .await;
             // 后续修改
+            // 已经修改
             RespVO::from_result(&user_data).resp_json()
         }
         _ => RespVO::<String>::from_error(&Error::from("access token is empty"), "-10").resp_json(),

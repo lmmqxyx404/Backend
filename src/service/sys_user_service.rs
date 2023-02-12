@@ -19,6 +19,7 @@ use crate::pool;
 
 // 引入CONTEXT
 use crate::service::CONTEXT;
+use crate::util::options::OptionStringRefUnwrapOrDefault;
 use crate::util::password_encoder::PasswordEncoder;
 /// 引入 Page
 use rbatis::sql::page::Page;
@@ -209,20 +210,35 @@ impl SysUserService {
         {
             return Err(Error::E("用户名和姓名不能为空".to_string()));
         }
-        /*
-        code```
+        // unwrap_or_def 这个方法需要进一步了解
+        let old_user = self
+            .find_by_account(arg.account.as_ref().unwrap_or_def())
+            .await?;
+        if old_user.is_some() {
+            return Err(Error::from(format!(
+                "用户账户: {}已存在",
+                arg.account.as_ref().unwrap()
+            )));
+        }
         let mut password = arg.password.as_deref().unwrap_or_default().to_string();
-                if password.is_empty() {
-                    password = "123456".to_string()
-                }
-                arg.password = Some(password);
-                ```
-                */
+        if password.is_empty() {
+            // 设置默认密码
+            password = "123456".to_string()
+        }
+
+        arg.password = Some(password);
         let role_id = arg.role_id.clone();
         let user = SysUser::from(arg);
-        /* if role_id.is_some() {
-            CONTEXT.sys
-        } */
+        if role_id.is_some() {
+            CONTEXT
+                .sys_user_role_service
+                .add(UserRoleAddDTO {
+                    id: None,
+                    user_id: user.id.clone(),
+                    role_id: role_id,
+                })
+                .await?;
+        }
         // 注意看 rows_affected 这个函数,弄清楚返回一个u64的用意
         Ok(SysUser::insert(pool!(), &user).await?.rows_affected)
     }

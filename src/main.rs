@@ -8,7 +8,10 @@
  */
 use actix_web::{web, App, HttpResponse, HttpServer, Responder};
 
-use backend::{controller::{img_verify_controller, sys_user_controller}, service::CONTEXT};
+use backend::{
+    controller::{img_verify_controller, sys_user_controller},
+    service::CONTEXT,
+};
 async fn index() -> impl Responder {
     HttpResponse::Ok().body("[backend] Hello world!")
 }
