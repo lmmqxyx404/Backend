@@ -61,6 +61,7 @@ pub async fn user_add(arg: web::Json<UserAddDTO>) -> impl Responder {
 }
 
 /// 删除用户
+/// 删除日志没有记录（2023年2月12日23点14分）
 pub async fn user_remove(arg: web::Json<IdDTO>) -> impl Responder {
     let vo = CONTEXT
         .sys_user_service
