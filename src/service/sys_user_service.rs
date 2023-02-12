@@ -252,7 +252,8 @@ impl SysUserService {
         let r = SysUser::delete_by_column(pool!(), field_name!(SysUser.id), id).await?;
         /// 记录删除日志
         /// 删除对应用户的角色
-        Ok(64)
+        CONTEXT.sys_user_role_service.remove_by_user_id(id).await?;
+        Ok(r.rows_affected)
     }
 
     /// 修改用户信息

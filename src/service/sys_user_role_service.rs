@@ -1,5 +1,6 @@
 use std::collections::BTreeMap;
 
+use rbatis::object_id::ObjectId;
 use rbatis::sql::Page;
 
 use crate::domain::dto::user::{UserPageDTO, UserRoleAddDTO, UserRolePageDTO};
@@ -34,7 +35,7 @@ impl SysUserRoleService {
     }
 
     /// 添加角色
-    /// 部分代码与原工程不一致
+    /// 部分 变量名 与原工程不一致
     pub async fn add(&self, arg: UserRoleAddDTO) -> Result<u64> {
         if arg.user_id.is_none() || arg.role_id.is_none() {
             return Err(Error::from("添加角色时用户和角色不能为空！"));
@@ -42,6 +43,9 @@ impl SysUserRoleService {
         let user_id = arg.user_id.as_deref().unwrap().to_string();
         /// 形成角色
         let mut user_role = SysUserRole::from(arg);
+        if user_role.id.is_none() {
+            user_role.id = Some(ObjectId::new().to_string());
+        }
         self.remove_by_user_id(user_id.as_str()).await?;
         Ok(SysUserRole::insert(pool!(), &user_role)
             .await?
