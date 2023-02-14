@@ -18,3 +18,8 @@ pub async fn add(arg: web::Json<SysRoleResAddDTO>) -> impl Responder {
 
     return RespVO::<()>::from_error(&Error::from("access token"), "-10").resp_json();
 }
+
+/// 层级数据
+pub async fn layer_top(arg: web::Json<SysRoleResAddDTO>) -> impl Responder {
+    return RespVO::<()>::from_error(&Error::from("access token"), "-10").resp_json();
+}
