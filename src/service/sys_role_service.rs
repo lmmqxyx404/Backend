@@ -38,6 +38,7 @@ impl SysRoleService {
         Ok(page)
     }
 
+    /// sys_role_controller 会调用
     pub async fn finds_layer(&self) -> Result<Vec<SysRoleVO>> {
         let all = self.finds_all_map().await?;
         let mut data = vec![];

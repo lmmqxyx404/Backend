@@ -23,3 +23,7 @@ use serde::{Deserialize, Serialize};
 pub struct IdDTO {
     pub id: Option<String>,
 }
+
+/// common dto EmptyDTO
+#[derive(Debug, Deserialize, Serialize, Clone)]
+pub struct EmptyDTO {}

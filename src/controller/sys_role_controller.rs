@@ -1,6 +1,7 @@
 use actix_web::{web, Responder};
 
 use crate::domain::dto::role::SysRoleResAddDTO;
+use crate::domain::dto::EmptyDTO;
 use crate::domain::vo::RespVO;
 use crate::error::Error;
 use crate::{domain::dto::role::SysRoleResPageDTO, service::CONTEXT};
@@ -20,6 +21,7 @@ pub async fn add(arg: web::Json<SysRoleResAddDTO>) -> impl Responder {
 }
 
 /// 层级数据
-pub async fn layer_top(arg: web::Json<SysRoleResAddDTO>) -> impl Responder {
+pub async fn layer_top(arg: web::Json<EmptyDTO>) -> impl Responder {
+    let vo = CONTEXT.sys_role_service.finds_layer().await;
     return RespVO::<()>::from_error(&Error::from("access token"), "-10").resp_json();
 }
