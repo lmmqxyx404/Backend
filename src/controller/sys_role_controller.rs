@@ -25,3 +25,8 @@ pub async fn layer_top(arg: web::Json<EmptyDTO>) -> impl Responder {
     let vo = CONTEXT.sys_role_service.finds_layer().await;
     return RespVO::<()>::from_error(&Error::from("access token"), "-10").resp_json();
 }
+
+/// 角色修改
+pub async fn update(arg: web::Json<SysRoleResUpdateDTO>) -> impl Responder {
+    return RespVO::<()>::from_error(&Error::from("access token"), "-10").resp_json();
+}
