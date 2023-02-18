@@ -48,6 +48,26 @@ impl From<RoleAddDTO> for SysRole {
     }
 }
 
+/// role edit dto
+#[derive(Clone, Debug, Serialize, Deserialize)]
+struct RoleEditDTO {
+    pub id: Option<String>,
+    pub name: Option<String>,
+    pub parent_id: Option<String>,
+    pub resource_ids: Vec<String>,
+}
+
+impl From<RoleEditDTO> for SysRole {
+    fn from(value: RoleEditDTO) -> Self {
+        SysRole {
+            id: value.id,
+            name: value.name,
+            parent_id: value.parent_id,
+            del: None,
+            create_date: None,
+        }
+    }
+}
 /// 角色资源添加
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct SysRoleResAddDTO {
@@ -62,6 +82,26 @@ impl From<SysRoleResAddDTO> for RoleAddDTO {
         Self {
             name: value.name,
             parent_id: value.parent_id,
+        }
+    }
+}
+
+/// role update
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct SysRoleResUpdateDTO {
+    pub id: Option<String>,
+    pub name: Option<String>,
+    pub parent_id: Option<String>,
+    pub resource_ids: Vec<String>,
+}
+
+impl From<SysRoleResUpdateDTO> for RoleEditDTO {
+    fn from(value: SysRoleResUpdateDTO) -> Self {
+        Self {
+            id: value.id,
+            name: value.name,
+            parent_id: value.parent_id,
+            resource_ids: value.resource_ids,
         }
     }
 }

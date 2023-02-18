@@ -1,6 +1,6 @@
 use actix_web::{web, Responder};
 
-use crate::domain::dto::role::SysRoleResAddDTO;
+use crate::domain::dto::role::{SysRoleResAddDTO, SysRoleResUpdateDTO};
 use crate::domain::dto::EmptyDTO;
 use crate::domain::vo::RespVO;
 use crate::error::Error;
