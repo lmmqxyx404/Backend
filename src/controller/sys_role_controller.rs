@@ -1,7 +1,7 @@
 use actix_web::{web, Responder};
 
 use crate::domain::dto::role::{SysRoleResAddDTO, SysRoleResUpdateDTO};
-use crate::domain::dto::EmptyDTO;
+use crate::domain::dto::{EmptyDTO, IdDTO};
 use crate::domain::vo::RespVO;
 use crate::error::Error;
 use crate::{domain::dto::role::SysRoleResPageDTO, service::CONTEXT};
@@ -28,5 +28,9 @@ pub async fn layer_top(arg: web::Json<EmptyDTO>) -> impl Responder {
 
 /// 角色修改
 pub async fn update(arg: web::Json<SysRoleResUpdateDTO>) -> impl Responder {
+    return RespVO::<()>::from_error(&Error::from("access token"), "-10").resp_json();
+}
+
+pub async fn remove(arg: web::Json<IdDTO>) -> impl Responder {
     return RespVO::<()>::from_error(&Error::from("access token"), "-10").resp_json();
 }
