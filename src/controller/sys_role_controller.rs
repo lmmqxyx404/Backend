@@ -31,6 +31,9 @@ pub async fn update(arg: web::Json<SysRoleResUpdateDTO>) -> impl Responder {
     return RespVO::<()>::from_error(&Error::from("access token"), "-10").resp_json();
 }
 
+/// 角色删除
 pub async fn remove(arg: web::Json<IdDTO>) -> impl Responder {
+    let role_id = arg.0.id.unwrap_or_default();
+    let vo = CONTEXT.sys_role_res_service.remove_role(&role_id).await;
     return RespVO::<()>::from_error(&Error::from("access token"), "-10").resp_json();
 }

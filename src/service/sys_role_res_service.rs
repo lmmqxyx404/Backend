@@ -94,4 +94,10 @@ impl SysRoleResService {
         Err(Error::from("zan wei wancheng"))
         // Ok(SysRoleRes)
     }
+
+    /// 角色删除，同时删除用户关系，权限关系
+    pub async fn remove_role(&self, role_id: &str) -> Result<u64> {
+        // let remove_roles=CONTEXT.sys_role_service.remove()
+        Err(Error::from("zan wei wancheng"))
+    }
 }
