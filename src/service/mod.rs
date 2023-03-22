@@ -37,11 +37,15 @@ mod sys_res_service;
 /// 垃圾桶服务
 mod sys_trash_service;
 
+/// 系统字典服务
+mod sys_dict_service;
+
 pub use mem_service::*;
 pub use redis_service::*;
 // pub mod sys_config_service;
 
 pub use sys_auth_service::*;
+pub use sys_dict_service::*;
 pub use sys_user_role_service::*;
 pub use sys_user_service::*;
 
@@ -64,6 +68,7 @@ pub struct ServiceContext {
     pub sys_res_service: SysResService,
     pub sys_user_role_service: SysUserRoleService,
     pub sys_role_res_service: SysRoleResService,
+    pub sys_dict_service: SysDictService,
 }
 
 impl Default for ServiceContext {
@@ -85,6 +90,7 @@ impl Default for ServiceContext {
             sys_user_role_service: SysUserRoleService {},
             // 2023年1月18日23点49分
             sys_role_res_service: SysRoleResService {},
+            sys_dict_service: SysDictService {},
         }
     }
 }
