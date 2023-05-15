@@ -89,6 +89,16 @@ pub struct SysTrash {
     pub create_date: Option<FastDateTime>,
 }
 
+/// 字典表
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SysDict {
+    pub id: Option<String>,
+    pub name: Option<String>,
+    pub code: Option<String>,
+    pub state: Option<i32>,
+    pub create_date: Option<FastDateTime>,
+}
+
 mod test {
     use crate::domain::table::enums::LoginCheck;
 
