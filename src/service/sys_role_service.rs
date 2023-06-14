@@ -134,4 +134,12 @@ impl SysRoleService {
         self.update_cache().await?;
         Ok(result)
     }
+
+    /// 角色删除
+    pub async fn remove(&self, id: &str) -> Result<(u64)> {
+        // trash service 暂时不需要
+        let result = SysRole::delete_by_column(pool!(), field_name!(SysRole.id), id).await?;
+        self.update_cache().await?;
+        Ok(result.rows_affected)
+    }
 }
