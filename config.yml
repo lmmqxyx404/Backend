@@ -42,5 +42,5 @@ white_list_api:
  - "/"
  - "/admin/sys_login"
  - "/admin/captcha"
-
+# 考虑使用 grpc 暴露接口
 

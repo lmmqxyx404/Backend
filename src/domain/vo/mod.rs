@@ -13,7 +13,6 @@ pub mod role;
 /// dictionary
 pub mod dict;
 
-
 use serde::de::DeserializeOwned;
 use serde::{Deserialize, Serialize};
 

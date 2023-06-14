@@ -53,7 +53,7 @@ pub use sys_user_service::*;
 use self::{
     cache_service::CacheService, sys_res_service::SysResService,
     sys_role_res_service::SysRoleResService, sys_role_service::SysRoleService,
-    sys_sms_service::SysSmsService,
+    sys_sms_service::SysSmsService, sys_trash_service::SysTrashService,
 };
 // service context 必须为 pub,否则 无法给上下文使用
 pub struct ServiceContext {
@@ -69,6 +69,7 @@ pub struct ServiceContext {
     pub sys_user_role_service: SysUserRoleService,
     pub sys_role_res_service: SysRoleResService,
     pub sys_dict_service: SysDictService,
+    pub sys_trash_service: SysTrashService,
 }
 
 impl Default for ServiceContext {
@@ -91,6 +92,7 @@ impl Default for ServiceContext {
             // 2023年1月18日23点49分
             sys_role_res_service: SysRoleResService {},
             sys_dict_service: SysDictService {},
+            sys_trash_service: SysTrashService {},
         }
     }
 }
