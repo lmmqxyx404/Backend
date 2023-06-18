@@ -6,7 +6,7 @@ use crate::{
     domain::{
         dto::{
             res,
-            role::{RoleAddDTO, RolePageDTO},
+            role::{RoleAddDTO, RoleEditDTO, RolePageDTO},
         },
         table::{SysRole, SysRoleRes, SysUserRole},
         vo::{res::SysResVO, role::SysRoleVO},
@@ -141,5 +141,13 @@ impl SysRoleService {
         let result = SysRole::delete_by_column(pool!(), field_name!(SysRole.id), id).await?;
         self.update_cache().await?;
         Ok(result.rows_affected)
+    }
+
+    /// 角色修改
+    pub async fn edit(&self, arg: RoleEditDTO) -> Result<u64> {
+        let role = SysRole::from(arg);
+        let result = SysRole::update_by_column(pool!(), &role, field_name!(SysRole.id)).await;
+        self.update_cache().await?;
+        Ok(result?.rows_affected)
     }
 }

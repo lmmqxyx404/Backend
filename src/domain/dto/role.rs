@@ -50,7 +50,7 @@ impl From<RoleAddDTO> for SysRole {
 
 /// role edit dto
 #[derive(Clone, Debug, Serialize, Deserialize)]
-struct RoleEditDTO {
+pub struct RoleEditDTO {
     pub id: Option<String>,
     pub name: Option<String>,
     pub parent_id: Option<String>,

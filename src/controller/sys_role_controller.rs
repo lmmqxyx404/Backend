@@ -17,23 +17,27 @@ pub async fn page(arg: web::Json<SysRoleResPageDTO>) -> impl Responder {
 pub async fn add(arg: web::Json<SysRoleResAddDTO>) -> impl Responder {
     let vo = CONTEXT.sys_role_res_service.add(&arg.0).await;
 
-    return RespVO::<()>::from_error(&Error::from("access token"), "-10").resp_json();
+    return RespVO::from_result(&vo).resp_json();
 }
 
 /// 层级数据
 pub async fn layer_top(arg: web::Json<EmptyDTO>) -> impl Responder {
     let vo = CONTEXT.sys_role_service.finds_layer().await;
-    return RespVO::<()>::from_error(&Error::from("access token"), "-10").resp_json();
+    return RespVO::from_result(&vo).resp_json();
+    // return RespVO::<()>::from_error(&Error::from("access token"), "-10").resp_json();
 }
 
 /// 角色修改
 pub async fn update(arg: web::Json<SysRoleResUpdateDTO>) -> impl Responder {
-    return RespVO::<()>::from_error(&Error::from("access token"), "-10").resp_json();
+    let vo = CONTEXT.sys_role_res_service.edit(&arg.0).await;
+    return RespVO::from_result(&vo).resp_json();
+    // return RespVO::<()>::from_error(&Error::from("access token"), "-10").resp_json();
 }
 
 /// 角色删除
 pub async fn remove(arg: web::Json<IdDTO>) -> impl Responder {
     let role_id = arg.0.id.unwrap_or_default();
     let vo = CONTEXT.sys_role_res_service.remove_role(&role_id).await;
-    return RespVO::<()>::from_error(&Error::from("access token"), "-10").resp_json();
+    return RespVO::from_result(&vo).resp_json();
+    // return RespVO::<()>::from_error(&Error::from("access token"), "-10").resp_json();
 }

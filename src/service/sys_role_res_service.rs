@@ -4,7 +4,10 @@ use rbatis::sql::Page;
 
 use crate::{
     domain::{
-        dto::role::{RoleAddDTO, RolePageDTO, SysRoleResAddDTO, SysRoleResPageDTO},
+        dto::role::{
+            RoleAddDTO, RoleEditDTO, RolePageDTO, SysRoleResAddDTO, SysRoleResPageDTO,
+            SysRoleResUpdateDTO,
+        },
         table::SysRoleRes,
         vo::{res::SysResVO, role::SysRoleVO},
     },
@@ -17,6 +20,7 @@ use super::CONTEXT;
 pub struct SysRoleResService {}
 
 impl SysRoleResService {
+    /// 角色-资源 分页
     pub async fn page(&self, arg: &SysRoleResPageDTO) -> Result<Page<SysRoleVO>> {
         let mut role_page = CONTEXT
             .sys_role_service
@@ -28,8 +32,9 @@ impl SysRoleResService {
             .await?;
         let all = CONTEXT.sys_res_service.finds_all_map().await?;
         let role_res_map = self.find_role_res_map(&role_page.records).await?;
-        // role_page.records=self.l
-        Err(Error::from("zan wei wancheng"))
+        role_page.records = self.loop_set_res_vec(role_page.records, &role_res_map, &all)?;
+        Ok(role_page)
+        // Err(Error::from("zan wei wancheng"))
     }
 
     /// 添加角色资源
@@ -97,7 +102,23 @@ impl SysRoleResService {
 
     /// 角色删除，同时删除用户关系，权限关系
     pub async fn remove_role(&self, role_id: &str) -> Result<u64> {
-        // let remove_roles=CONTEXT.sys_role_service.remove()
+        let remove_roles = CONTEXT.sys_role_service.remove(role_id).await?;
+        let remove_user_roles = CONTEXT
+            .sys_user_role_service
+            .remove_by_role_id(role_id)
+            .await?;
         Err(Error::from("zan wei wancheng"))
+    }
+
+    pub async fn edit(&self, arg: &SysRoleResUpdateDTO) -> Result<u64> {
+        let role_id = arg
+            .id
+            .as_ref()
+            .ok_or_else(|| Error::from("role id cn not be empty"))?;
+        CONTEXT
+            .sys_role_service
+            .edit(RoleEditDTO::from(arg.clone()))
+            .await?;
+        todo!()
     }
 }
