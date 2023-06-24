@@ -91,7 +91,11 @@ impl SysRoleResService {
         &self,
         arg: &Vec<SysRoleVO>,
     ) -> Result<HashMap<String, HashSet<SysRoleRes>>> {
-        Err(Error::from("zan wei wancheng"))
+        // todo:
+        let role_ids=self.loop_find_role_ids(arg);
+        
+        todo!()
+        // Err(Error::from("zan wei wancheng"))
     }
 
     /// 删除角色资源（依据role_id）
@@ -107,6 +111,7 @@ impl SysRoleResService {
             .sys_user_role_service
             .remove_by_role_id(role_id)
             .await?;
+        // todo:
         Err(Error::from("zan wei wancheng"))
     }
 
@@ -119,6 +124,11 @@ impl SysRoleResService {
             .sys_role_service
             .edit(RoleEditDTO::from(arg.clone()))
             .await?;
+        todo!()
+    }
+
+    fn loop_find_role_ids(&self, arg: &Vec<SysRoleVO>) -> Vec<String> {
+        // todo
         todo!()
     }
 }

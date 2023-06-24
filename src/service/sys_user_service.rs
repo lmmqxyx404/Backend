@@ -282,7 +282,6 @@ impl SysUserService {
                 .await?
                 .rows_affected,
         )
-        //Ok(32 as u64)
     }
 
     /// 删除用户信息

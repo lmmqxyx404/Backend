@@ -5,6 +5,7 @@ use std::time::Duration;
 
 use super::ApplicationConfig;
 use crate::service::{MemService, RedisService};
+
 pub trait ICacheService: Send + Sync {
     fn get_string(&self, k: &str) -> BoxFuture<Result<String>>;
     fn set_string(&self, k: &str, v: &str) -> BoxFuture<Result<String>>;

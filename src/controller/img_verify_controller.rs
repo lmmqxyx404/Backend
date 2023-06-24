@@ -27,7 +27,7 @@ pub async fn captcha(arg: web::Query<CaptchaDTO>) -> impl Responder {
     // 如果在debug 模式，那么控制台应该输出相关信息
     println!("{:?}", img_str);
 
-    // 将验证码信息传递到 context 中，使得登录接口可以验证用户传递过来的验证码字符串
+    // todo: 将验证码信息传递到 context 中，使得登录接口可以验证用户传递过来的验证码字符串
 
     // 传输图片时，需要转换为 u8 放进body中
     let png = captcha.as_png().unwrap();
