@@ -30,3 +30,6 @@ pub mod error;
 
 /// 领域模型
 pub mod domain;
+
+///actix-web中间件
+pub mod middleware;
