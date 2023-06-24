@@ -13,3 +13,6 @@ pub mod sys_role_controller;
 
 /// 系统字典接口
 pub mod sys_dict_controller;
+
+///系统权限资源接口
+pub mod sys_res_controller;
