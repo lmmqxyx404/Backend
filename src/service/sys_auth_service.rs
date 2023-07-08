@@ -5,6 +5,7 @@ pub struct SysAuthService {}
 
 impl SysAuthService {
     pub async fn check_auth(&self, arg: SysAuthDTO) -> Result<JWT_Token> {
+        let jwt = crate::middleware::auth::checked_token(&arg.acces_token, &arg.path).await?;
         todo!()
     }
 }
