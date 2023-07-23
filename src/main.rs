@@ -10,6 +10,7 @@ use actix_web::{web, App, HttpResponse, HttpServer, Responder};
 
 use backend::{
     controller::{img_verify_controller, sys_user_controller},
+    middleware::auth_actix::Auth,
     service::CONTEXT,
 };
 async fn index() -> impl Responder {
@@ -27,6 +28,7 @@ async fn main() -> std::io::Result<()> {
     // 3.1 首先创建服务器实例App::new()
     HttpServer::new(|| {
         App::new()
+            .wrap(Auth{})
             .route("/", web::get().to(index))
             // 验证码路由接口
             .route(
