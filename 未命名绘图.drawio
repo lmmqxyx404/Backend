@@ -1,0 +1,31 @@
+<mxfile host="app.diagrams.net" modified="2023-07-19T18:11:50.027Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36 Edg/114.0.1823.82" etag="bHNmqzMLqKvp-boiC1g7" version="21.6.2" type="github">
+  <diagram name="Page-1" id="0783ab3e-0a74-02c8-0abd-f7b4e66b4bec">
+    <mxGraphModel dx="1379" dy="775" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" background="none" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="PVvxX1H2W1Pw4qH0qA-g-3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="PVvxX1H2W1Pw4qH0qA-g-1" target="PVvxX1H2W1Pw4qH0qA-g-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="PVvxX1H2W1Pw4qH0qA-g-1" value="main" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="260" y="110" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="PVvxX1H2W1Pw4qH0qA-g-5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="PVvxX1H2W1Pw4qH0qA-g-2" target="PVvxX1H2W1Pw4qH0qA-g-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="PVvxX1H2W1Pw4qH0qA-g-2" value="1. CONTEXT.init_pool()&lt;br&gt;initialize to link the database&amp;nbsp;" style="whiteSpace=wrap;html=1;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="190" y="210" width="260" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="PVvxX1H2W1Pw4qH0qA-g-7" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="PVvxX1H2W1Pw4qH0qA-g-4" target="PVvxX1H2W1Pw4qH0qA-g-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="PVvxX1H2W1Pw4qH0qA-g-4" value="2. build the server and add the gate middleware" style="whiteSpace=wrap;html=1;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="205" y="350" width="230" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="PVvxX1H2W1Pw4qH0qA-g-6" value="3. add all controller to exporse the api" style="whiteSpace=wrap;html=1;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="220" y="520" width="200" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
