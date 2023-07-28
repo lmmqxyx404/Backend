@@ -1,4 +1,7 @@
-use std::{future::Ready, rc::Rc};
+use std::{
+    future::{ready, Ready},
+    rc::Rc,
+};
 
 use actix_web::{
     body::BoxBody,
@@ -6,6 +9,8 @@ use actix_web::{
     Error,
 };
 use futures_util::future::LocalBoxFuture;
+
+use crate::service::CONTEXT;
 
 pub struct Auth;
 
@@ -21,7 +26,9 @@ where
     type Future = Ready<Result<Self::Transform, Self::InitError>>;
 
     fn new_transform(&self, service: S) -> Self::Future {
-        todo!()
+        ready(Ok(AuthMiddleware {
+            service: Rc::new(service),
+        }))
     }
 }
 
@@ -42,10 +49,26 @@ where
         &self,
         ctx: &mut core::task::Context<'_>,
     ) -> std::task::Poll<Result<(), Self::Error>> {
-        todo!()
+        self.service.poll_ready(ctx).map_err(Into::into)
     }
 
     fn call(&self, req: ServiceRequest) -> Self::Future {
+        let service = self.service.clone();
+
+        let token = req
+            .headers()
+            .get("access_token")
+            .map(|v| v.to_str().unwrap_or_default().to_string())
+            .unwrap_or_default();
+
+        let path = req.path().to_string();
+        
         todo!()
+        /*
+        Box::pin(async move{
+            if !CONTEXT.config.debug{
+                if !is
+            }
+        })*/
     }
 }
