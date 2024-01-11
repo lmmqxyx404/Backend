@@ -12,9 +12,9 @@ pub struct JWT_Token {
     /// 账号
     pub account: String,
     /// 权限集合
-    pub permissions: String,
+    pub permissions: Vec<String>,
     /// 角色id集合
-    pub role_ids: String,
+    pub role_ids: Vec<String>,
     /// 过期时间
     pub exp: usize,
 }
@@ -65,8 +65,8 @@ mod test {
         let tt = JWT_Token {
             id: "1".to_string(),
             account: "189".to_string(),
-            permissions: "189".to_string(),
-            role_ids: "189".to_string(),
+            permissions: vec![],
+            role_ids: vec![],
             exp: FastDateTime::now().set_micro(0).unix_timestamp_millis() as usize,
         };
         let token = tt.crate_token("ssss").unwrap();

@@ -6,11 +6,14 @@ use std::{
 use actix_web::{
     body::BoxBody,
     dev::{Service, ServiceRequest, ServiceResponse, Transform},
+    error::ErrorUnauthorized,
     Error,
 };
 use futures_util::future::LocalBoxFuture;
 
-use crate::service::CONTEXT;
+use crate::{domain::vo::RespVO, service::CONTEXT};
+
+use super::auth::{check_auth, checked_token, is_white_list_api};
 
 pub struct Auth;
 
@@ -62,13 +65,36 @@ where
             .unwrap_or_default();
 
         let path = req.path().to_string();
-        
-        todo!()
-        /*
-        Box::pin(async move{
-            if !CONTEXT.config.debug{
-                if !is
+
+        Box::pin(async move {
+            if !CONTEXT.config.debug {
+                if !is_white_list_api(&path) {
+                    match checked_token(&token, &path).await {
+                        Ok(data) => match check_auth(&data, &path).await {
+                            Ok(_) => {}
+                            Err(e) => {
+                                let resp: RespVO<String> = RespVO {
+                                    code: Some("-1".to_string()),
+                                    msg: Some(format!("无权限访问:{}", e.to_string())),
+                                    data: None,
+                                };
+                                return Ok(req.into_response(resp.resp_json()));
+                            }
+                        },
+                        Err(e) => {
+                            let resp: RespVO<String> = RespVO {
+                                code: Some("-1".to_string()),
+                                msg: Some(format!("Unauthorized for :{}", e.to_string())),
+                                data: None,
+                            };
+                            return Err(ErrorUnauthorized(serde_json::json!((&resp).to_string())));
+                        }
+                    }
+                }
             }
-        })*/
+
+            let res = service.call(req).await?;
+            Ok(res)
+        })
     }
 }
