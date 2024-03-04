@@ -6,18 +6,22 @@
  * @FilePath: \backend\src\main.rs
  * @Description:
  */
-use actix_web::{web, App, HttpResponse, HttpServer, Responder};
+// (depreciated) use actix_web::{web, App, HttpResponse, HttpServer, Responder};
 
 use backend::{
     controller::{img_verify_controller, sys_user_controller},
     middleware::auth_actix::Auth,
     service::CONTEXT,
 };
+
+use axum::routing::{get, post};
+use axum::Router;
+
 async fn index() -> impl Responder {
     HttpResponse::Ok().body("[backend] Hello world!")
 }
 
-#[actix_web::main]
+#[tokio::main]
 async fn main() -> std::io::Result<()> {
     // 1. 大型后端项目需要首先记录日志
 
@@ -26,9 +30,15 @@ async fn main() -> std::io::Result<()> {
     CONTEXT.init_pool().await;
     // 3. 启动路由服务
     // 3.1 首先创建服务器实例App::new()
+    let app = Router::new().route("/", get || index);
+    let listener = tokio::net::TcpListener::bind("127.0.0.1:8000")
+        .await
+        .unwrap();
+    axum::serve(listener, app).await
+    /*
     HttpServer::new(|| {
         App::new()
-            .wrap(Auth{})
+            .wrap(Auth {})
             .route("/", web::get().to(index))
             // 验证码路由接口
             .route(
@@ -49,4 +59,5 @@ async fn main() -> std::io::Result<()> {
     .bind("127.0.0.1:8000")?
     .run()
     .await
+    */
 }

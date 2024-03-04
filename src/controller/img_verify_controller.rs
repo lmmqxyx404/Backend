@@ -2,16 +2,28 @@ use crate::domain::dto::sign_in::CaptchaDTO;
 use crate::domain::vo::RespVO;
 use crate::error::Error;
 use crate::util::string::isEmptyString;
-use actix_web::{web, HttpResponse, Responder};
+// use actix_web::{web, HttpResponse, Responder};
 use captcha::filters::{Dots, Noise, Wave};
 use captcha::Captcha;
+
+use axum::body::Body;
+use axum::extract::Query;
+use axum::response::{IntoResponse, Response};
+
 /// 图形验证码接口
 /// debug 模式下无论缓存是否连接成功，都返回图片，release 模式下会校验reddis 缓存
 /// 请求时必须带上 account
-pub async fn captcha(arg: web::Query<CaptchaDTO>) -> impl Responder {
-    /// 账户为空时，不输出验证码，并且报错
+pub async fn captcha(arg: Query<CaptchaDTO>) -> impl IntoResponse {
+    // 账户为空时，不输出验证码，并且报错
     if arg.account.is_empty() {
-        return RespVO::<()>::from_error(&Error::from("account is empty"), "-1").resp_json();
+        // return RespVO::<()>::from_error(&Error::from("account is empty"), "-1").json();
+        let resp = Response::builder()
+            .header("Access-Control-Allow-Origin", "*")
+            .header("Cache-Control", "no-cache")
+            .header("Content-Type", "json")
+            .body(Body::from("todo: changed account_empty"))
+            .unwrap();
+        return resp;
     }
 
     let mut captcha = Captcha::new();
@@ -31,9 +43,11 @@ pub async fn captcha(arg: web::Query<CaptchaDTO>) -> impl Responder {
 
     // 传输图片时，需要转换为 u8 放进body中
     let png = captcha.as_png().unwrap();
-    HttpResponse::Ok()
-        .insert_header(("Access-Control-Allow-Origin", "*"))
-        .insert_header(("Cache-Control", "no-cache"))
-        .content_type("image/png")
-        .body(png)
+    let resp = Response::builder()
+        .header("Access-Control-Allow-Origin", "*")
+        .header("Cache-Control", "no-cache")
+        .header("Content-Type", "image/png")
+        .body(Body::from(png))
+        .unwrap();
+    return resp.into();
 }
