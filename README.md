@@ -16,3 +16,10 @@ And the aim of this project is to be a tutorial for people who are insterested i
  - rbatis-orm
  - mysql
  - redis
+
+# todo.
+## 1.tables.rs
+
+## 2. all mapper relative files to be changed.
+
+## 3. changed the error mod
