@@ -1,4 +1,6 @@
-use rbatis::{object_id::ObjectId, rbdc::datetime::FastDateTime, sql::PageRequest};
+use rbatis::object_id::ObjectId;
+use rbatis::rbdc::DateTime;
+use rbatis::PageRequest;
 use serde::{Deserialize, Serialize};
 
 use crate::domain::table::SysRole;
@@ -42,8 +44,8 @@ impl From<RoleAddDTO> for SysRole {
             id: ObjectId::new().to_string().into(),
             name: value.name,
             parent_id: value.parent_id,
-            del: 0.into(),
-            create_date: FastDateTime::now().set_micro(0).into(),
+            // del: 0.into(),
+            create_date: DateTime::now().into(),
         }
     }
 }
@@ -63,7 +65,7 @@ impl From<RoleEditDTO> for SysRole {
             id: value.id,
             name: value.name,
             parent_id: value.parent_id,
-            del: None,
+            // del: None,
             create_date: None,
         }
     }

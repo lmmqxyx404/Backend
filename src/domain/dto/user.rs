@@ -1,6 +1,6 @@
 use rbatis::object_id::ObjectId;
-use rbatis::rbdc::datetime::FastDateTime;
-use rbatis::sql::PageRequest;
+use rbatis::rbdc::DateTime;
+use rbatis::PageRequest;
 use serde::{Deserialize, Serialize};
 
 use crate::domain::table::enums::LoginCheck;
@@ -33,7 +33,7 @@ impl From<UserRoleAddDTO> for SysUserRole {
             id: arg.id.clone(),
             user_id: arg.user_id.clone(),
             role_id: arg.role_id.clone(),
-            create_date: FastDateTime::now().set_micro(0).into(),
+            create_date: DateTime::now().into(),
         }
     }
 }
@@ -84,7 +84,7 @@ impl From<UserEditDTO> for SysUser {
             login_check: arg.login_check,
             name: arg.name,
             state: arg.state,
-            del: None,
+            // del: None,
             create_date: None,
         }
     }

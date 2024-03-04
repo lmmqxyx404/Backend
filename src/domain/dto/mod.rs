@@ -6,8 +6,8 @@ pub mod sign_in;
 /// 用户模块
 pub mod user;
 
-/// 资源模块
-pub mod res;
+/// 权限管理模块
+pub mod permission;
 
 /// 角色模块
 pub mod role;

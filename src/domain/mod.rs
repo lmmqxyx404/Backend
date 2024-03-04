@@ -14,13 +14,14 @@ pub mod mapper;
 /// * DDD 分层架构，数据库结构，存放数据库结构体模型
 pub mod table;
 
-use crate::rbatis::Rbatis;
+// use crate::rbatis::Rbatis;
 // 注意一下是否有区别（22点38分2022年10月25日）
-use crate::service::ApplicationConfig;
+// use crate::service::ApplicationConfig;
 // use crate::config::config::ApplicationConfig;
 
-/// 实例化 rbatis orm 连接池，主要检测运行模式与配置选项是否匹配
-pub fn init_rbatis(config: &ApplicationConfig) -> Rbatis {
+// all depreciated
+// 实例化 rbatis orm 连接池，主要检测运行模式与配置选项是否匹配
+/* pub fn init_rbatis(config: &ApplicationConfig) -> Rbatis {
     let rbatis_instance = Rbatis::new();
     if rbatis_instance.is_debug_mode() == false && config.debug.eq(&true) {
         panic!(
@@ -29,4 +30,4 @@ pub fn init_rbatis(config: &ApplicationConfig) -> Rbatis {
     }
     println!("create a rbatis instance");
     rbatis_instance
-}
+} */

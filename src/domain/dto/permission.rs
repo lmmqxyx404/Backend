@@ -1,7 +1,9 @@
-use rbatis::{object_id::ObjectId, rbdc::datetime::FastDateTime, sql::PageRequest};
+use rbatis::object_id::ObjectId;
+use rbatis::rbdc::DateTime;
+use rbatis::PageRequest;
 use serde::{Deserialize, Serialize};
 
-use crate::domain::table::SysRes;
+use crate::domain::table::SysPermission;
 
 /// 资源分页
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -25,22 +27,23 @@ pub struct ResAddDTO {
     pub path: Option<String>,
 }
 
-impl From<&ResAddDTO> for SysRes {
+impl From<&ResAddDTO> for SysPermission {
     fn from(arg: &ResAddDTO) -> Self {
-        SysRes {
+        SysPermission {
             id: ObjectId::new().to_string().into(),
             parent_id: arg.parent_id.clone(),
             name: arg.name.clone(),
             permission: arg.permission.clone(),
             path: arg.path.clone(),
-            del: 0.into(),
-            create_date: FastDateTime::now().set_micro(0).into(),
+            // del: 0.into(),
+            create_date: DateTime::now().into(),
         }
     }
 }
 
 /// 资源修改
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone)]
+
 pub struct ResEditDTO {
     pub id: Option<String>,
     pub parent_id: Option<String>,
@@ -49,15 +52,15 @@ pub struct ResEditDTO {
     pub path: Option<String>,
 }
 
-impl From<&ResEditDTO> for SysRes {
+impl From<&ResEditDTO> for SysPermission {
     fn from(arg: &ResEditDTO) -> Self {
-        SysRes {
+        SysPermission {
             id: arg.id.clone(),
             parent_id: arg.parent_id.clone(),
             name: arg.name.clone(),
             permission: arg.permission.clone(),
             path: arg.path.clone(),
-            del: None,
+            // del: None,
             create_date: None,
         }
     }

@@ -1,4 +1,5 @@
-use rbatis::{rbdc::datetime::FastDateTime, sql::PageRequest};
+use rbatis::rbdc::DateTime;
+use rbatis::PageRequest;
 use serde::{Deserialize, Serialize};
 
 use crate::domain::table::SysDict;
@@ -59,7 +60,7 @@ impl From<DictAddDTO> for SysDict {
             name: value.name.clone(),
             code: value.code.clone(),
             state: value.state.clone(),
-            create_date: FastDateTime::now().set_micro(0).into(),
+            create_date: DateTime::now().into(),
         }
     }
 }
