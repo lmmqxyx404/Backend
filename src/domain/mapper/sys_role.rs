@@ -1,5 +1,6 @@
 use crate::domain::table::SysRole;
 
+/* 
 crud!(SysRole {});
 
 impl_select!(SysRole{select_list_by_ids(ids:&[String])=>
@@ -15,3 +16,4 @@ if name != '':
 `and parent_id IS NULL`
 if !sql.contains('count'):
 `order by create_date desc`"});
+*/
