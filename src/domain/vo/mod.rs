@@ -13,12 +13,14 @@ pub mod role;
 /// dictionary
 pub mod dict;
 
+pub use sign_in::*;
+
 use serde::de::DeserializeOwned;
 use serde::{Deserialize, Serialize};
 
 use crate::error::Error;
 
-use actix_web::HttpResponse;
+// use actix_web::HttpResponse;
 const SUCCESS_CODE: &str = "SUCCESS";
 const FAIL_CODE: &str = "FAIL";
 
@@ -71,12 +73,15 @@ where
         }
     }
 
-    pub fn resp_json(&self) -> HttpResponse {
+    /* pub fn resp_json(&self) -> HttpResponse {
         return HttpResponse::Ok()
             .insert_header(("Access-Control-Allow-Origin", "*"))
             .insert_header(("Cache-Control", "no-cache"))
             .insert_header(("Content_Type", "text/json;charset=UTF-8"))
             .body(self.to_string());
+    } */
+    pub fn json(self) -> axum::Json<RespVO<T>> {
+        axum::Json(self)
     }
 }
 

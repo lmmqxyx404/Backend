@@ -1,9 +1,9 @@
-use rbatis::rbdc::datetime::FastDateTime;
+use rbatis::rbdc::datetime::DateTime;
 use serde::{Deserialize, Serialize};
 
 use crate::domain::table::SysRole;
 
-use super::res::SysResVO;
+use super::res::SysPermissionVO;
 
 /// 角色VO
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -13,8 +13,8 @@ pub struct SysRoleVO {
     /// 父ID
     pub parent_id: Option<String>,
     pub del: Option<i32>,
-    pub create_date: Option<FastDateTime>,
-    pub resources: Vec<SysResVO>,
+    pub create_date: Option<DateTime>,
+    pub resources: Vec<SysPermissionVO>,
     pub childs: Option<Vec<SysRoleVO>>,
     pub resource_ids: Vec<String>,
 }

@@ -1,4 +1,5 @@
-use rbatis::rbdc::datetime::FastDateTime;
+use rbatis::rbdc::DateTime;
+// use rbatis::rbdc::datetime::FastDateTime;
 use serde::{Deserialize, Serialize};
 
 use crate::domain::table::SysDict;
@@ -10,7 +11,8 @@ pub struct SysDictVO {
     pub name: Option<String>,
     pub code: Option<String>,
     pub state: Option<i32>,
-    pub create_date: Option<FastDateTime>,
+    /// todo: the definition changed
+    pub create_date: Option<DateTime>,
 }
 
 impl From<SysDict> for SysDictVO {

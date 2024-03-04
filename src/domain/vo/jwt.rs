@@ -58,7 +58,7 @@ impl JWT_Token {
 #[cfg(test)]
 mod test {
     use super::*;
-    use rbatis::rbdc::types::datetime::FastDateTime;
+    use rbatis::rbdc::types::datetime::DateTime;
 
     #[test]
     fn test_jwt() {
@@ -67,7 +67,7 @@ mod test {
             account: "189".to_string(),
             permissions: vec![],
             role_ids: vec![],
-            exp: FastDateTime::now().set_micro(0).unix_timestamp_millis() as usize,
+            exp: DateTime::now().unix_timestamp_millis() as usize,
         };
         let token = tt.crate_token("ssss").unwrap();
         println!("{:?}", token);

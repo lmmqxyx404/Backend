@@ -1,39 +1,43 @@
 use std::collections::HashMap;
 
-use rbatis::rbdc::datetime::FastDateTime;
+use crate::domain::table::SysPermission;
+use rbatis::rbdc::datetime::DateTime;
 use serde::{Deserialize, Serialize};
 
-use crate::domain::table::SysRes;
+// use crate::domain::table::SysRes;
 
 /// 权限资源表
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct SysResVO {
+pub struct SysPermissionVO {
     pub id: Option<String>,
+    // father id(can empty)
     pub parent_id: Option<String>,
     pub name: Option<String>,
+    // permission
     pub permission: Option<String>,
+    // menu path
     pub path: Option<String>,
-    pub del: Option<i32>,
-    pub create_date: Option<FastDateTime>,
-    pub childs: Option<Vec<SysResVO>>,
+    // pub del: Option<i32>,
+    pub create_date: Option<DateTime>,
+    pub childs: Option<Vec<SysPermissionVO>>,
 }
 
-impl From<SysRes> for SysResVO {
-    fn from(arg: SysRes) -> Self {
+impl From<SysPermission> for SysPermissionVO {
+    fn from(arg: SysPermission) -> Self {
         Self {
             id: arg.id,
             parent_id: arg.parent_id,
             name: arg.name,
             permission: arg.permission,
             path: arg.path,
-            del: arg.del,
+            // del: arg.del,
             create_date: arg.create_date,
             childs: None,
         }
     }
 }
 
-impl SysResVO {
+impl SysPermissionVO {
     pub fn get_father_id(&self) -> &Option<String> {
         &self.parent_id
     }
