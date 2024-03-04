@@ -1,11 +1,11 @@
 use std::collections::BTreeMap;
 
 use rbatis::object_id::ObjectId;
-use rbatis::sql::Page;
+use rbatis::Page;
 
 use crate::domain::dto::user::{UserPageDTO, UserRoleAddDTO, UserRolePageDTO};
 use crate::domain::table::SysRole;
-use crate::domain::vo::res::SysResVO;
+use crate::domain::vo::res::SysPermissionVO;
 use crate::domain::vo::role::SysRoleVO;
 use crate::domain::vo::user::SysUserVO;
 use crate::error::{Error, Result};
@@ -75,7 +75,7 @@ impl SysUserRoleService {
     pub async fn find_user_role(
         &self,
         user_id: &str,
-        all_res: &BTreeMap<String, SysResVO>,
+        all_res: &BTreeMap<String, SysPermissionVO>,
     ) -> Result<Option<SysRoleVO>> {
         if user_id.is_empty() {
             return Ok(None);

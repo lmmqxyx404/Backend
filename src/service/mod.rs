@@ -4,7 +4,7 @@ pub use crate::config::config::ApplicationConfig;
 /// 1. 静态化一个全局变量方便全局共享
 use once_cell::sync::Lazy;
 /// 2. 辅助生成 rbatis 实例,实现 orm 线程池
-use rbatis::rbatis::Rbatis;
+use rbatis::rbatis::RBatis;
 /// service 层级
 
 /// 系统用户层
@@ -58,7 +58,7 @@ use self::{
 // service context 必须为 pub,否则 无法给上下文使用
 pub struct ServiceContext {
     // 2022年10月26日00点15分 添加 rbatis
-    pub rbatis: Rbatis,
+    pub rbatis: RBatis,
     pub config: ApplicationConfig,
     pub sys_auth_service: SysAuthService,
     pub sys_user_service: SysUserService,
@@ -78,11 +78,17 @@ impl Default for ServiceContext {
         // 1. 生成配置结构体
         let config = ApplicationConfig::default();
         // 2. 生成 rbatis 实例
-        let rbatis_instanece = crate::domain::init_rbatis(&config);
+        // let rbatis_instanece = crate::domain::init_rbatis(&config);
         ServiceContext {
             cache_service: CacheService::new(&config).unwrap(),
             config: config,
-            rbatis: rbatis_instanece,
+            rbatis: {
+                let rb = RBatis::new();
+                if rb.is_debug_mode() == false && config.debug.eq(&true) {
+                    panic!(r#"please edit application.json5   “debug: false” "#);
+                }
+                rb
+            },
             sys_auth_service: SysAuthService {},
             sys_user_service: SysUserService {},
             sys_role_service: SysRoleService {},
@@ -97,19 +103,35 @@ impl Default for ServiceContext {
     }
 }
 
-use rbdc_mysql::driver::MysqlDriver;
+// use rbdc_mysql::driver::MysqlDriver;
 
 impl ServiceContext {
     pub async fn init_pool(&self) {
         // 连接数据库
         // println!("hello world");
-        println!("[backend] rbatis pool init ({})", &self.config.database_url);
-        let res = self.rbatis.init(MysqlDriver {}, &self.config.database_url);
-        if res.is_ok() {
-            println!("[backend] rbatis success");
-        } else {
-            println!("[backend] rbatis failed");
-        }
+        // println!("[backend] rbatis pool init ({})", &self.config.database_url);
+        log::info!(
+            "[abs_admin] rbatis pool init ({})...",
+            self.config.database_url
+        );
+        self.rbatis.link(
+            include!("../../target/driver.rs"),
+            &self.config.database_url,
+        );
+        // let res = self.rbatis.init(MysqlDriver {}, &self.config.database_url);
+        log::info!(
+            "[abs_admin] rbatis pool init success! pool state = {}",
+            self.rbatis
+                .get_pool()
+                .expect("pool not init!")
+                .state()
+                .await
+        );
+        log::info!(
+            " - Local:   http://{}",
+            self.config.server_url.replace("0.0.0.0", "127.0.0.1")
+        );
+
         //.expect("[backend] rbatis failed");
         // 输出日志
     }
@@ -144,7 +166,7 @@ mod test {
     fn test_link_database() {
         let aaa = ServiceContext::default();
         println!("prepare to init_pool");
-        /// 异步测试需要单独做
+        // 异步测试需要单独做
         // let res = aaa.rbatis.link(MysqlDriver {}, &aaa.config.database_url).await;
         println!("{}", aaa.config.database_url);
         // assert_eq!(res.is_ok(), true);

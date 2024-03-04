@@ -1,6 +1,6 @@
 use std::collections::{BTreeMap, HashMap, HashSet};
 
-use rbatis::sql::Page;
+use rbatis::{Page, PageRequest};
 
 use crate::{
     domain::{
@@ -8,8 +8,8 @@ use crate::{
             RoleAddDTO, RoleEditDTO, RolePageDTO, SysRoleResAddDTO, SysRoleResPageDTO,
             SysRoleResUpdateDTO,
         },
-        table::SysRoleRes,
-        vo::{res::SysResVO, role::SysRoleVO},
+        table::SysRolePermission,
+        vo::{res::SysPermissionVO, role::SysRoleVO},
     },
     error::{Error, Result},
     util::options::OptionStringRefUnwrapOrDefault,
@@ -55,8 +55,8 @@ impl SysRoleResService {
     fn loop_set_res_vec(
         &self,
         arg: Vec<SysRoleVO>,
-        role_res_map: &HashMap<String, HashSet<SysRoleRes>>,
-        all: &BTreeMap<String, SysResVO>,
+        role_res_map: &HashMap<String, HashSet<SysRolePermission>>,
+        all: &BTreeMap<String, SysPermissionVO>,
     ) -> Result<Vec<SysRoleVO>> {
         let mut data = vec![];
         for mut role in arg {
@@ -90,7 +90,7 @@ impl SysRoleResService {
     async fn find_role_res_map(
         &self,
         arg: &Vec<SysRoleVO>,
-    ) -> Result<HashMap<String, HashSet<SysRoleRes>>> {
+    ) -> Result<HashMap<String, HashSet<SysRolePermission>>> {
         // todo:
         let role_ids=self.loop_find_role_ids(arg);
         
@@ -101,7 +101,7 @@ impl SysRoleResService {
     /// 删除角色资源（依据role_id）
     pub async fn remove_by_role_id(&self, role_id: &str) -> Result<u64> {
         Err(Error::from("zan wei wancheng"))
-        // Ok(SysRoleRes)
+        // Ok(SysRolePermission)
     }
 
     /// 角色删除，同时删除用户关系，权限关系

@@ -3,7 +3,7 @@ use crate::domain::dto::sign_in::SignDTO;
 use crate::domain::table::tables::SysUser;
 use crate::domain::table::LoginCheck;
 use crate::domain::vo::jwt::JWT_Token;
-use crate::domain::vo::res::SysResVO;
+use crate::domain::vo::res::SysPermissionVO;
 use crate::domain::vo::sign_in::SignVO;
 use crate::domain::vo::user::SysUserVO;
 
@@ -22,9 +22,7 @@ use crate::service::CONTEXT;
 use crate::util::options::OptionStringRefUnwrapOrDefault;
 use crate::util::password_encoder::PasswordEncoder;
 /// 引入 Page
-use rbatis::sql::page::Page;
-use rbatis::sql::PageRequest;
-
+use rbatis::{Page, PageRequest};
 /// 引入BTREE
 use std::collections::BTreeMap;
 /// 绝大多数DTO映射成VO
@@ -293,7 +291,7 @@ impl SysUserService {
     pub async fn load_level_permission(
         &self,
         user_id: &str,
-        all_res: &BTreeMap<String, SysResVO>,
+        all_res: &BTreeMap<String, SysPermissionVO>,
     ) -> Result<Vec<String>> {
         CONTEXT
             .sys_role_service

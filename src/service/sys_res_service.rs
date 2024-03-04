@@ -1,12 +1,12 @@
 use std::collections::{BTreeMap, HashMap};
 
-use rbatis::sql::{Page, PageRequest};
+use rbatis::{Page, PageRequest};
 
 use crate::{
     domain::{
-        dto::res::{ResEditDTO, ResPageDTO},
-        table::SysRes,
-        vo::res::SysResVO,
+        dto::permission::{ResEditDTO, ResPageDTO},
+        table::SysPermission,
+        vo::res::SysPermissionVO,
     },
     error::{Error, Result},
     pool,
@@ -20,15 +20,15 @@ pub struct SysResService {}
 
 impl SysResService {
     /// 资源分页
-    pub async fn page(&self, arg: &ResPageDTO) -> Result<Page<SysResVO>> {
+    pub async fn page(&self, arg: &ResPageDTO) -> Result<Page<SysPermissionVO>> {
         let page_req = PageRequest::new(arg.page_no.unwrap_or(1), arg.page_size.unwrap_or(10));
-        let data = SysRes::select_page(pool!(), &PageRequest::from(arg), &arg).await?;
+        let data = SysPermission::select_page(pool!(), &PageRequest::from(arg), &arg).await?;
         let all_res = self.finds_all_map().await?;
         let mut all_res_vo = HashMap::new();
         for (k, v) in all_res {
             all_res_vo.insert(k, v);
         }
-        let mut page = Page::<SysResVO>::from(data);
+        let mut page = Page::<SysPermissionVO>::from(data);
         for vo in &mut page.records {
             vo.set_childs_recursive(&all_res_vo);
         }
@@ -37,8 +37,8 @@ impl SysResService {
     }
 
     /// 添加资源
-    pub async fn add(&self, arg: &SysRes) -> Result<u64> {
-        let old = SysRes::select_by_permission_or_name(
+    pub async fn add(&self, arg: &SysPermission) -> Result<u64> {
+        let old = SysPermission::select_by_permission_or_name(
             pool!(),
             arg.permission.as_deref().unwrap_or_default(),
             arg.name.as_deref().unwrap_or_default(),
@@ -50,23 +50,23 @@ impl SysResService {
                 rbatis::make_table_field_vec!(old, name)
             )));
         }
-        let res = Ok(SysRes::insert(pool!(), &arg).await?.rows_affected);
+        let res = Ok(SysPermission::insert(pool!(), &arg).await?.rows_affected);
         self.update_cache().await?;
         res
     }
 
     /// 修改资源
     pub async fn edit(&self, arg: &ResEditDTO) -> Result<u64> {
-        let data = SysRes::from(arg);
-        let res = SysRes::update_by_column(pool!(), &data, "id").await?;
+        let data = SysPermission::from(arg);
+        let res = SysPermission::update_by_column(pool!(), &data, "id").await?;
         self.update_cache().await?;
         Ok(res.rows_affected)
     }
 
     /// 删除资源
     pub async fn remove(&self, id: &str) -> Result<u64> {
-        let trash = SysRes::select_by_column(pool!(), "id", id).await?;
-        let num = SysRes::delete_by_column(pool!(), "id", id)
+        let trash = SysPermission::select_by_column(pool!(), "id", id).await?;
+        let num = SysPermission::delete_by_column(pool!(), "id", id)
             .await?
             .rows_affected;
 
@@ -74,8 +74,8 @@ impl SysResService {
     }
 
     /// 更新缓存
-    pub async fn update_cache(&self) -> Result<Vec<SysResVO>> {
-        let all = SysRes::select_all(pool!()).await?;
+    pub async fn update_cache(&self) -> Result<Vec<SysPermissionVO>> {
+        let all = SysPermission::select_all(pool!()).await?;
         CONTEXT.cache_service.set_json(RES_KEY, &all).await?;
         let mut v = vec![];
         for x in all {
@@ -86,10 +86,10 @@ impl SysResService {
     }
 
     /// 查找res数组
-    pub async fn finds_all(&self) -> Result<Vec<SysResVO>> {
+    pub async fn finds_all(&self) -> Result<Vec<SysPermissionVO>> {
         let js = CONTEXT
             .cache_service
-            .get_json::<Option<Vec<SysRes>>>(RES_KEY)
+            .get_json::<Option<Vec<SysPermission>>>(RES_KEY)
             .await;
 
         if js.is_err()
@@ -110,7 +110,7 @@ impl SysResService {
         //Err(Error::from("temporary"))
     }
 
-    pub fn make_res_ids(&self, args: &Vec<SysResVO>) -> Vec<String> {
+    pub fn make_res_ids(&self, args: &Vec<SysPermissionVO>) -> Vec<String> {
         let mut ids = vec![];
         for x in args {
             ids.push(x.id.as_deref().unwrap_or_default().to_string());
@@ -125,7 +125,7 @@ impl SysResService {
     }
 
     /// 登陆的时候，就需要用
-    pub async fn finds_all_map(&self) -> Result<BTreeMap<String, SysResVO>> {
+    pub async fn finds_all_map(&self) -> Result<BTreeMap<String, SysPermissionVO>> {
         let all = self.finds_all().await?;
         let mut result = BTreeMap::new();
         for x in all {

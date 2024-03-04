@@ -1,4 +1,4 @@
-use rbatis::{object_id::ObjectId, rbdc::datetime::FastDateTime};
+use rbatis::{object_id::ObjectId, rbdc::datetime::DateTime};
 use serde::Serialize;
 
 use crate::{domain::table::SysTrash, error::Error, pool};
@@ -21,7 +21,7 @@ impl SysTrashService {
                 id: Some(ObjectId::new().to_string().into()),
                 table_name: Some(table_name.to_string()),
                 date: Some(serde_json::to_string(x).unwrap_or_default()),
-                create_date: Some(FastDateTime::now()),
+                create_date: Some(DateTime::now()),
             })
         }
         Ok(SysTrash::insert_batch(pool!(), &trashs, 20)

@@ -1,15 +1,15 @@
 use std::collections::{BTreeMap, HashMap};
 
-use rbatis::sql::{Page, PageRequest};
+use rbatis::{Page, PageRequest};
 
 use crate::{
     domain::{
         dto::{
-            res,
+            permission,
             role::{RoleAddDTO, RoleEditDTO, RolePageDTO},
         },
-        table::{SysRole, SysRoleRes, SysUserRole},
-        vo::{res::SysResVO, role::SysRoleVO},
+        table::{SysRole, SysRolePermission, SysUserRole},
+        vo::{res::SysPermissionVO, role::SysRoleVO},
     },
     error::{Error, Result},
 };
@@ -80,18 +80,18 @@ impl SysRoleService {
         Ok(all)
     }
 
-    pub async fn find_role_res(&self, ids: &Vec<String>) -> Result<Vec<SysRoleRes>> {
+    pub async fn find_role_res(&self, ids: &Vec<String>) -> Result<Vec<SysRolePermission>> {
         if ids.is_empty() {
             return Ok(vec![]);
         }
-        Ok(SysRoleRes::select_by_role_id(pool!(), ids).await?)
+        Ok(SysRolePermission::select_by_role_id(pool!(), ids).await?)
         // Err(Error::from("hello"))
     }
 
     pub async fn find_user_permission(
         &self,
         user_id: &str,
-        all_res: &BTreeMap<String, SysResVO>,
+        all_res: &BTreeMap<String, SysPermissionVO>,
     ) -> Result<Vec<String>> {
         let user_roles =
             SysUserRole::select_by_column(pool!(), field_name!(SysUserRole.user_id), user_id)
