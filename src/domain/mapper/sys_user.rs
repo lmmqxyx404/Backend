@@ -1,6 +1,5 @@
 use crate::domain::table::tables::SysUser;
 
-/*
 /// 后台用户表 过程宏
 /// 只有使用了crud！ 这个宏之后，才能生成之后的宏
 crud!(SysUser {});
@@ -14,4 +13,3 @@ if account != '':
 if !sql.contains('count'):
 `order by create data desc`"
 });
- */

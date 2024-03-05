@@ -80,11 +80,11 @@ impl SysRoleService {
         Ok(all)
     }
 
-    pub async fn find_role_res(&self, ids: &Vec<String>) -> Result<Vec<SysRolePermission>> {
-        if ids.is_empty() {
+    pub async fn find_role_res(&self, role_ids: &Vec<String>) -> Result<Vec<SysRolePermission>> {
+        if role_ids.is_empty() {
             return Ok(vec![]);
         }
-        Ok(SysRolePermission::select_by_role_id(pool!(), ids).await?)
+        Ok(SysRolePermission::select_by_column(pool!(), "role_id", role_ids).await?)
         // Err(Error::from("hello"))
     }
 

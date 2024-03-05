@@ -1,6 +1,6 @@
 use crate::domain::table::*;
 
-/* 
+
 crud!(SysPermission {});
 
 impl_select_page!(SysPermission{select_page(dto: &crate::domain::dto::permission::ResPageDTO) =>
@@ -13,4 +13,3 @@ impl_select_page!(SysPermission{select_page(dto: &crate::domain::dto::permission
 
 impl_select!(SysPermission{select_by_permission_or_name(permission:&str,name:&str) => "`where permission = #{permission} or name = #{name}`"});
 impl_select!(SysPermission{select_by_parent_id_null()=>"`where parent_id IS NULL order by create_date desc`"});
-*/

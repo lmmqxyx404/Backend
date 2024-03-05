@@ -64,7 +64,7 @@ impl SysRoleResService {
             let mut res_vos = vec![];
             if let Some(res_ids) = res_ids {
                 for x in res_ids {
-                    match all.get(x.res_id.as_ref().unwrap_or_def()) {
+                    match all.get(x.permission_id.as_ref().unwrap_or_def()) {
                         Some(res) => {
                             res_vos.push(res.clone());
                         }
@@ -92,8 +92,8 @@ impl SysRoleResService {
         arg: &Vec<SysRoleVO>,
     ) -> Result<HashMap<String, HashSet<SysRolePermission>>> {
         // todo:
-        let role_ids=self.loop_find_role_ids(arg);
-        
+        let role_ids = self.loop_find_role_ids(arg);
+
         todo!()
         // Err(Error::from("zan wei wancheng"))
     }

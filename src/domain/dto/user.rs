@@ -84,7 +84,7 @@ impl From<UserEditDTO> for SysUser {
             login_check: arg.login_check,
             name: arg.name,
             state: arg.state,
-            // del: None,
+            del: None,
             create_date: None,
         }
     }

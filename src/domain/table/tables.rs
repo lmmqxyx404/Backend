@@ -4,9 +4,10 @@ use serde::{Deserialize, Serialize};
 use crate::{domain::dto::user::UserAddDTO, util::password_encoder::PasswordEncoder};
 
 /// 创建角色时用的上
-use rbatis::rbdc::datetime::FastDateTime;
+use rbatis::rbdc::datetime::DateTime;
 
 use crate::domain::table::LoginCheck;
+
 /// 后台用户表
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SysUser {
@@ -19,7 +20,7 @@ pub struct SysUser {
     pub name: Option<String>,
     pub state: Option<i32>,
     pub del: Option<i32>,
-    pub create_date: Option<FastDateTime>,
+    pub create_date: Option<DateTime>,
 }
 
 /// 转化
@@ -33,7 +34,7 @@ impl From<UserAddDTO> for SysUser {
             login_check: arg.login_check,
             state: 0.into(),
             del: 0.into(),
-            create_date: FastDateTime::now().set_micro(0).into(),
+            create_date: DateTime::now().into(),
         }
     }
 }
@@ -43,7 +44,7 @@ pub struct SysUserRole {
     pub id: Option<String>,
     pub user_id: Option<String>,
     pub role_id: Option<String>,
-    pub create_date: Option<FastDateTime>,
+    pub create_date: Option<DateTime>,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Hash, Serialize, Deserialize)]
@@ -53,22 +54,21 @@ pub struct SysRoleRes {
     pub role_id: Option<String>,
     /// 资源ID
     pub res_id: Option<String>,
-    pub create_date: Option<FastDateTime>,
+    pub create_date: Option<DateTime>,
 }
 
 /// 权限资源表
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct SysRes {
+pub struct SysPermission {
     pub id: Option<String>,
-    /// 父 ID ,可以为空
+    //father id(can empty)
     pub parent_id: Option<String>,
     pub name: Option<String>,
-    /// 权限
+    //permission
     pub permission: Option<String>,
-    /// 前端-菜单路径（路由路径）
+    //menu path
     pub path: Option<String>,
-    pub del: Option<i32>,
-    pub create_date: Option<FastDateTime>,
+    pub create_date: Option<DateTime>,
 }
 
 /// 角色表
@@ -78,7 +78,7 @@ pub struct SysRole {
     pub name: Option<String>,
     pub parent_id: Option<String>,
     pub del: Option<i32>,
-    pub create_date: Option<FastDateTime>,
+    pub create_date: Option<DateTime>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -86,7 +86,7 @@ pub struct SysTrash {
     pub id: Option<String>,
     pub table_name: Option<String>,
     pub date: Option<String>,
-    pub create_date: Option<FastDateTime>,
+    pub create_date: Option<DateTime>,
 }
 
 /// 字典表
@@ -96,7 +96,16 @@ pub struct SysDict {
     pub name: Option<String>,
     pub code: Option<String>,
     pub state: Option<i32>,
-    pub create_date: Option<FastDateTime>,
+    pub create_date: Option<DateTime>,
+}
+
+///Role Permission relational tables (relational tables do not use logical deletion)
+#[derive(Clone, Debug, Eq, PartialEq, Hash, serde::Serialize, serde::Deserialize)]
+pub struct SysRolePermission {
+    pub id: Option<String>,
+    pub role_id: Option<String>,
+    pub permission_id: Option<String>,
+    pub create_date: Option<DateTime>,
 }
 
 mod test {

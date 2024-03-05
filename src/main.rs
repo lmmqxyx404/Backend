@@ -10,16 +10,12 @@
 
 use backend::{
     controller::{img_verify_controller, sys_user_controller},
-    middleware::auth_actix::Auth,
+    middleware::auth_axum::Auth,
     service::CONTEXT,
 };
 
 use axum::routing::{get, post};
 use axum::Router;
-
-async fn index() -> impl Responder {
-    HttpResponse::Ok().body("[backend] Hello world!")
-}
 
 #[tokio::main]
 async fn main() -> std::io::Result<()> {
@@ -30,7 +26,7 @@ async fn main() -> std::io::Result<()> {
     CONTEXT.init_pool().await;
     // 3. 启动路由服务
     // 3.1 首先创建服务器实例App::new()
-    let app = Router::new().route("/", get || index);
+    let app = Router::new().route("/", get(|| async { "index" }));
     let listener = tokio::net::TcpListener::bind("127.0.0.1:8000")
         .await
         .unwrap();

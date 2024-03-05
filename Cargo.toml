@@ -14,7 +14,8 @@ tokio = { version = "1", features = ["macros"] }
 # 3.1 depreciate
 # rbatis = { version = "3.1", default-features = false, features = ["mysql", "runtime-tokio-rustls"] }
 # rbson = "2.0"
-rbs = { version = "0.1" }
+# very important crate that could influence the macro call.
+rbs = { version = "4.5" }
 rbatis = { version = "4", features = ["debug_mode"] }
 rbdc-sqlite = { version = "4.5" }
 # rbdc-mysql = { version = "0.1" }

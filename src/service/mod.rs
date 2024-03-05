@@ -81,7 +81,6 @@ impl Default for ServiceContext {
         // let rbatis_instanece = crate::domain::init_rbatis(&config);
         ServiceContext {
             cache_service: CacheService::new(&config).unwrap(),
-            config: config,
             rbatis: {
                 let rb = RBatis::new();
                 if rb.is_debug_mode() == false && config.debug.eq(&true) {
@@ -99,6 +98,8 @@ impl Default for ServiceContext {
             sys_role_res_service: SysRoleResService {},
             sys_dict_service: SysDictService {},
             sys_trash_service: SysTrashService {},
+            // must set at the last so that can transfer the ownership correctly.
+            config: config,
         }
     }
 }
