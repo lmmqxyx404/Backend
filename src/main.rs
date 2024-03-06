@@ -26,7 +26,14 @@ async fn main() -> std::io::Result<()> {
     CONTEXT.init_pool().await;
     // 3. 启动路由服务
     // 3.1 首先创建服务器实例App::new()
-    let app = Router::new().route("/", get(|| async { "index" }));
+    let app = Router::new()
+        .route("/", get(|| async { "index" }))
+        .route("/admin/sys_login", post(sys_user_controller::login))
+        .route("/admin/sys_user_info", post(sys_user_controller::user_info))
+        .route(
+            "/admin/sys_user_detail",
+            post(sys_user_controller::user_detail),
+        );
     let listener = tokio::net::TcpListener::bind("127.0.0.1:8000")
         .await
         .unwrap();
