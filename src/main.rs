@@ -28,12 +28,17 @@ async fn main() -> std::io::Result<()> {
     // 3.1 首先创建服务器实例App::new()
     let app = Router::new()
         .route("/", get(|| async { "index" }))
+        // 图片验证码
+        .route("/admin/captcha", get(img_verify_controller::captcha))
         .route("/admin/sys_login", post(sys_user_controller::login))
         .route("/admin/sys_user_info", post(sys_user_controller::user_info))
         .route(
             "/admin/sys_user_detail",
             post(sys_user_controller::user_detail),
-        );
+        )
+        .layer(axum::middleware::from_fn(
+            backend::middleware::auth_axum::auth,
+        ));
     let listener = tokio::net::TcpListener::bind("127.0.0.1:8000")
         .await
         .unwrap();
