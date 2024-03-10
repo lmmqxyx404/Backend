@@ -9,9 +9,7 @@
 // (depreciated) use actix_web::{web, App, HttpResponse, HttpServer, Responder};
 
 use backend::{
-    controller::{img_verify_controller, sys_user_controller},
-    middleware::auth_axum::Auth,
-    service::CONTEXT,
+    controller::{img_verify_controller, sys_user_controller}, domain::table, middleware::auth_axum::Auth, service::CONTEXT
 };
 
 use axum::routing::{get, post};
@@ -24,8 +22,10 @@ async fn main() -> std::io::Result<()> {
     // 2. 选择连接数据库
     // 切记，一定要连接数据库
     CONTEXT.init_pool().await;
+    table::sync_tables(&CONTEXT.rbatis).await;
+    table::sync_tables_data(&CONTEXT.rbatis).await;
     // 3. 启动路由服务
-    // 3.1 首先创建服务器实例App::new()
+    // 3.1 首先创建路由实例App::new()
     let app = Router::new()
         .route("/", get(|| async { "index" }))
         // 图片验证码
