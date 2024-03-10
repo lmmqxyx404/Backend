@@ -16,6 +16,7 @@ pub struct JWT_Token {
     /// 角色id集合
     pub role_ids: Vec<String>,
     /// 过期时间
+    /// todo: change the name
     pub exp: usize,
 }
 
@@ -52,6 +53,13 @@ impl JWT_Token {
                 _ => return Err(crate::error::Error::E("Unknmown Token Error".to_string())),
             },
         };
+    }
+
+    /// 刷新token 时间为传入的双倍
+    pub fn refresh(&self, secret: &str, jwt_exp: usize) -> Result<String> {
+        let mut jwt = self.clone();
+        jwt.exp = jwt.exp + jwt.exp;
+        jwt.crate_token(&secret)
     }
 }
 
