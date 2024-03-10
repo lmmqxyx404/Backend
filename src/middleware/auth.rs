@@ -1,7 +1,7 @@
 use crate::{domain::vo::jwt::JWT_Token, service::CONTEXT};
 
 ///校验token是否有效，未过期
-pub async fn checked_token(token: &str, path: &str) -> Result<JWT_Token, crate::error::Error> {
+pub fn checked_token(token: &str, path: &str) -> Result<JWT_Token, crate::error::Error> {
     let token = JWT_Token::verify(&CONTEXT.config.jwt_secret, token);
     match token {
         Ok(token) => {
