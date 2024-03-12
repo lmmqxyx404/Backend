@@ -9,9 +9,9 @@ pub struct ApplicationConfig {
     /// 数据库地址
     pub database_url: String,
     /// 逻辑删除字段
-    pub logic_column: String,
+    /* pub logic_column: String,
     pub logic_un_deleted: i64,
-    pub logic_deleted: i64,
+    pub logic_deleted: i64, */
     ///日志目录 "target/logs/"
     pub log_dir: String,
     /// "100MB" 日志分割尺寸-单位KB,MB,GB
@@ -39,10 +39,16 @@ pub struct ApplicationConfig {
 ///默认配置
 impl Default for ApplicationConfig {
     fn default() -> Self {
-        let yml_data = include_str!("../../config.yml");
+        let json_data = include_str!("../../application.json5");
+        // let yml_data = include_str!("../../config.yml");
         //读取配置
-        let result: ApplicationConfig =
-            serde_yaml::from_str(yml_data).expect("load config file fail");
+        let mut result: ApplicationConfig =
+            json5::from_str(json_data).expect("load config file fail");
+        if cfg!(debug_assertions) {
+            result.debug = true;
+        } else {
+            result.debug = false;
+        }
         if result.debug {
             println!("[backend] load config:{:?}", result);
             println!(

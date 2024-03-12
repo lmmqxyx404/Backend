@@ -27,7 +27,7 @@ async fn main() -> std::io::Result<()> {
     // 3. 启动路由服务
     // 3.1 首先创建路由实例App::new()
     let app = Router::new()
-        .route("/", get(|| async { "index" }))
+        .route("/", get(|| async { "BACKEND START index ppp" }))
         // 图片验证码
         .route("/admin/captcha", get(img_verify_controller::captcha))
         .route("/admin/sys_login", post(sys_user_controller::login))

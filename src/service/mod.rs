@@ -115,10 +115,14 @@ impl ServiceContext {
             "[abs_admin] rbatis pool init ({})...",
             self.config.database_url
         );
-        self.rbatis.link(
-            include!("../../target/driver.rs"),
-            &self.config.database_url,
-        );
+        // 这是异步方法
+        self.rbatis
+            .link(
+                include!("../../target/driver.rs"),
+                &self.config.database_url,
+            )
+            .await
+            .expect("[abs_admin] rbatis pool init fail!");
         // let res = self.rbatis.init(MysqlDriver {}, &self.config.database_url);
         log::info!(
             "[abs_admin] rbatis pool init success! pool state = {}",
