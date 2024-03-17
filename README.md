@@ -23,3 +23,9 @@ And the aim of this project is to be a tutorial for people who are insterested i
 ## 2. all mapper relative files to be changed.
 
 ## 3. changed the error mod
+
+## 4. 注册接口
+- 白名单要放行
+- 结构要调整正确
+- 要解决网关授权问题
+注意当前注册接口。

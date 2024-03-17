@@ -15,6 +15,24 @@ use backend::{
 use axum::routing::{get, post};
 use axum::Router;
 
+
+async fn global_options_middleware(req: Request, next: Next) -> impl IntoResponse {
+    if req.method() == http::Method::OPTIONS {
+        // 返回统一的OPTIONS响应
+        Response::builder()
+            .status(StatusCode::NO_CONTENT)
+            .header("Access-Control-Allow-Origin", "*")
+            .header("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
+            .header("Access-Control-Allow-Headers", "X-PINGOTHER, Content-Type, Authorization")
+            .body(Body::empty())
+            .unwrap()
+    } else {
+        // 对于非OPTIONS请求，继续传递到下一个中间件或路由处理器
+        next.run(req).await
+    }
+}
+
+
 #[tokio::main]
 async fn main() -> std::io::Result<()> {
     // 1. 大型后端项目需要首先记录日志
@@ -30,6 +48,7 @@ async fn main() -> std::io::Result<()> {
         .route("/", get(|| async { "BACKEND START index ppp" }))
         // 图片验证码
         .route("/admin/captcha", get(img_verify_controller::captcha))
+        // 登录接口，实现登录功能
         .route("/admin/sys_login", post(sys_user_controller::login))
         .route("/admin/sys_user_info", post(sys_user_controller::user_info))
         .route(
