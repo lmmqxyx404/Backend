@@ -13,6 +13,7 @@ use axum::response::{IntoResponse, Response};
 /// 图形验证码接口
 /// debug 模式下无论缓存是否连接成功，都返回图片，release 模式下会校验reddis 缓存
 /// 请求时必须带上 account
+/// http://localhost:8000/admin/captcha?account=18900000000
 pub async fn captcha(arg: Query<CaptchaDTO>) -> impl IntoResponse {
     // 账户为空时，不输出验证码，并且报错
     if arg.account.is_empty() {
