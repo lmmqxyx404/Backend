@@ -9,12 +9,23 @@
 // (depreciated) use actix_web::{web, App, HttpResponse, HttpServer, Responder};
 
 use backend::{
-    controller::{img_verify_controller, sys_user_controller}, domain::table, middleware::auth_axum::Auth, service::CONTEXT
+    controller::{img_verify_controller, sys_user_controller},
+    domain::table,
+    middleware::auth_axum::Auth,
+    service::CONTEXT,
 };
 
-use axum::routing::{get, post};
-use axum::Router;
-
+use axum::{
+    body::Body,
+    extract::Request,
+    middleware::Next,
+    response::IntoResponse,
+    routing::{get, post},
+};
+use axum::{
+    http::{self, Response, StatusCode},
+    Router,
+};
 
 async fn global_options_middleware(req: Request, next: Next) -> impl IntoResponse {
     if req.method() == http::Method::OPTIONS {
@@ -23,7 +34,10 @@ async fn global_options_middleware(req: Request, next: Next) -> impl IntoRespons
             .status(StatusCode::NO_CONTENT)
             .header("Access-Control-Allow-Origin", "*")
             .header("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
-            .header("Access-Control-Allow-Headers", "X-PINGOTHER, Content-Type, Authorization")
+            .header(
+                "Access-Control-Allow-Headers",
+                "X-PINGOTHER, Content-Type, Authorization",
+            )
             .body(Body::empty())
             .unwrap()
     } else {
@@ -31,7 +45,6 @@ async fn global_options_middleware(req: Request, next: Next) -> impl IntoRespons
         next.run(req).await
     }
 }
-
 
 #[tokio::main]
 async fn main() -> std::io::Result<()> {
@@ -55,6 +68,8 @@ async fn main() -> std::io::Result<()> {
             "/admin/sys_user_detail",
             post(sys_user_controller::user_detail),
         )
+        .route("/admin/sys_user_add", post(sys_user_controller::user_add))
+        .layer(axum::middleware::from_fn(global_options_middleware))
         .layer(axum::middleware::from_fn(
             backend::middleware::auth_axum::auth,
         ));
