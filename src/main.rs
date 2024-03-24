@@ -11,13 +11,13 @@
 use backend::{
     controller::{img_verify_controller, sys_user_controller},
     domain::table,
-    middleware::auth_axum::Auth,
     service::CONTEXT,
 };
 
 use axum::{
     body::Body,
     extract::Request,
+    http::Method,
     middleware::Next,
     response::IntoResponse,
     routing::{get, post},
@@ -27,23 +27,44 @@ use axum::{
     Router,
 };
 
-async fn global_options_middleware(req: Request, next: Next) -> impl IntoResponse {
-    if req.method() == http::Method::OPTIONS {
+async fn global_options_middleware(req: Request<Body>, next: Next) -> impl IntoResponse {
+    log::info!("Handling CORS for request method: {}", req.method());
+    let response = match req.method() {
         // 返回统一的OPTIONS响应
-        Response::builder()
+        // If it's an OPTIONS request, return a default response with CORS headers
+        &Method::OPTIONS => Response::builder()
             .status(StatusCode::NO_CONTENT)
             .header("Access-Control-Allow-Origin", "*")
-            .header("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
+            .header(
+                "Access-Control-Allow-Methods",
+                "POST, GET, OPTIONS, PUT, DELETE",
+            )
             .header(
                 "Access-Control-Allow-Headers",
                 "X-PINGOTHER, Content-Type, Authorization",
             )
             .body(Body::empty())
-            .unwrap()
-    } else {
-        // 对于非OPTIONS请求，继续传递到下一个中间件或路由处理器
-        next.run(req).await
-    }
+            .unwrap(),
+        // For other methods, proceed with the request and add CORS headers to the response
+        _ => {
+            // 对于非OPTIONS请求，继续传递到下一个中间件或路由处理器
+            let mut response = next.run(req).await.into_response();
+            response
+                .headers_mut()
+                .insert("Access-Control-Allow-Origin", "*".parse().unwrap());
+            response.headers_mut().insert(
+                "Access-Control-Allow-Methods",
+                "POST, GET, OPTIONS, PUT, DELETE".parse().unwrap(),
+            );
+            response.headers_mut().insert(
+                "Access-Control-Allow-Headers",
+                "X-PINGOTHER, Content-Type, Authorization".parse().unwrap(),
+            );
+            response
+        }
+    };
+
+    response
 }
 
 #[tokio::main]
@@ -69,10 +90,12 @@ async fn main() -> std::io::Result<()> {
             post(sys_user_controller::user_detail),
         )
         .route("/admin/sys_user_add", post(sys_user_controller::user_add))
-        .layer(axum::middleware::from_fn(global_options_middleware))
+        // 这是第二层
         .layer(axum::middleware::from_fn(
             backend::middleware::auth_axum::auth,
-        ));
+        ))
+        // 这是第一层中间件
+        .layer(axum::middleware::from_fn(global_options_middleware));
     let listener = tokio::net::TcpListener::bind("127.0.0.1:8000")
         .await
         .unwrap();
