@@ -52,7 +52,8 @@ chrono = { version = "0.4", features = ["serde"] }
 
 # log 打印日志的工具
 log = "0.4"
-fast_log = { version = "1.5", features = ["lz4", "zip", "gzip"] }
+# 升级fast_log版本，并且支持 mmap 特性
+fast_log = { version = "1.6", features = ["mmap"] }
 
 # 加密库
 md5 = "0.7"

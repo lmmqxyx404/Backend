@@ -28,10 +28,12 @@ use axum::{
 };
 
 async fn global_options_middleware(req: Request<Body>, next: Next) -> impl IntoResponse {
+    println!("haha");
     log::info!("Handling CORS for request method: {}", req.method());
     let response = match req.method() {
         // 返回统一的OPTIONS响应
         // If it's an OPTIONS request, return a default response with CORS headers
+        // 注意设置的 请求头字段
         &Method::OPTIONS => Response::builder()
             .status(StatusCode::NO_CONTENT)
             .header("Access-Control-Allow-Origin", "*")
@@ -70,7 +72,7 @@ async fn global_options_middleware(req: Request<Body>, next: Next) -> impl IntoR
 #[tokio::main]
 async fn main() -> std::io::Result<()> {
     // 1. 大型后端项目需要首先记录日志
-
+    backend::config::log::init_log();
     // 2. 选择连接数据库
     // 切记，一定要连接数据库
     CONTEXT.init_pool().await;

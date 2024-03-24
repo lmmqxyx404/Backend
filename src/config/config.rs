@@ -22,6 +22,11 @@ pub struct ApplicationConfig {
     pub log_rolling_type: String,
     ///日志等级
     pub log_level: String,
+    /// 日志类型 choose one of  ("mmap","file")
+    pub log_type: String,
+    /// 日志相关 
+    /// Log channel length: null for unbounded queue, non-null for bounded queue (better performance)
+    pub log_chan_len: Option<usize>,
     ///短信缓存队列（mem/redis）
     pub sms_cache_send_key_prefix: String,
     ///jwt 秘钥
