@@ -21,6 +21,7 @@ use crate::pool;
 use crate::service::CONTEXT;
 use crate::util::options::OptionStringRefUnwrapOrDefault;
 use crate::util::password_encoder::PasswordEncoder;
+use rbatis::rbdc::DateTime;
 /// 引入 Page
 use rbatis::{Page, PageRequest};
 /// 引入BTREE
@@ -48,7 +49,7 @@ impl SysUserService {
     pub async fn sign_in(&self, arg: &SignDTO) -> Result<SignVO> {
         /// 防止爆破登录
         // println!("sign in {:?}", arg);
-        let user = SysUser::select_by_column(pool!(), field_name!(SysUser.account), &arg.account)
+        let user = SysUser::select_by_column(pool!(), "account", &arg.account)
             .await?
             .into_iter()
             .next();
@@ -65,6 +66,7 @@ impl SysUserService {
             .unwrap_or(&LoginCheck::PasswordCheck)
         {
             LoginCheck::NoCheck => {}
+            // 密码登录功能
             LoginCheck::PasswordCheck => {
                 if !PasswordEncoder::verify(
                     user.password
@@ -93,10 +95,12 @@ impl SysUserService {
                     error = Some(Error::from("密码不正确！"))
                 }
             }
-            LoginCheck::PhoneCodeCheck => {}
+            LoginCheck::PhoneCodeCheck => {
+                todo!()
+            }
         }
         if error.is_some() {
-            /// 增加重试次数
+            // todo增加重试次数
             return Err(error.unwrap());
         }
         let sign_in_vo = self.get_user_info(&user).await?;
@@ -121,23 +125,22 @@ impl SysUserService {
             .id
             .clone()
             .ok_or_else(|| Error::from("用户数据错误，id为空"))?;
-        let mut interimVO = SignVO {
-            user: Some(SignDTO {
-                password: "asd".to_string(),
-                account: "asd".to_string(),
-                vcode: "asd".to_string(),
-            }),
-            permissions: vec![],
-            role: None,
-            access_token: String::new(),
-        };
-
         // 上面是初步处理 SysUser 信息，与其余service进行隔离
         // 下面是返回 user 对应的有价值的权限信息，比如 role ,以及合成 token
-        let all_res = CONTEXT.sys_res_service.finds_all_map().await?;
-        interimVO.permissions = self.load_level_permission(&user_id, &all_res).await?;
-        // interimVO.
-        Ok(interimVO)
+        let mut sign_vo = SignVO::from(user);
+
+        let jwt_token = JWT_Token {
+            id: sign_vo.id.clone().unwrap_or_default(),
+            account: sign_vo.account.clone().unwrap_or_default(),
+            permissions: sign_vo.permissions.clone(),
+            role_ids: vec![],
+            exp: DateTime::now().unix_timestamp() as usize + CONTEXT.config.jwt_exp,
+        };
+        sign_vo.access_token = jwt_token.create_token(&CONTEXT.config.jwt_secret)?;
+        // todo: 添加权限信息
+        Ok(sign_vo)
+        // let all_res = CONTEXT.sys_res_service.finds_all_map().await?;
+        // interimVO.permissions = self.load_level_permission(&user_id, &all_res).await?;
     }
 
     /// 通过token登录
@@ -222,7 +225,6 @@ impl SysUserService {
         if password.is_empty() {
             // 设置默认密码
             // password = "123456".to_string()
-            
             return Err(Error::from(format!("账户密码不能为空")));
         }
 

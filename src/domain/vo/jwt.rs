@@ -23,7 +23,7 @@ pub struct JWT_Token {
 impl JWT_Token {
     /// 创建 token
     /// secret: 对应的口令
-    pub fn crate_token(&self, secret: &str) -> Result<String> {
+    pub fn create_token(&self, secret: &str) -> Result<String> {
         match encode(
             &Header::default(),
             self,
@@ -59,7 +59,7 @@ impl JWT_Token {
     pub fn refresh(&self, secret: &str, jwt_exp: usize) -> Result<String> {
         let mut jwt = self.clone();
         jwt.exp = jwt.exp + jwt.exp;
-        jwt.crate_token(&secret)
+        jwt.create_token(&secret)
     }
 }
 
@@ -77,7 +77,7 @@ mod test {
             role_ids: vec![],
             exp: DateTime::now().unix_timestamp_millis() as usize,
         };
-        let token = tt.crate_token("ssss").unwrap();
+        let token = tt.create_token("ssss").unwrap();
         println!("{:?}", token);
         assert_eq!(JWT_Token::verify("ssss", &token).unwrap(), tt);
     }

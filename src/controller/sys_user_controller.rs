@@ -54,7 +54,8 @@ pub async fn user_detail(arg: Json<IdDTO>) -> impl IntoResponse {
     RespVO::from_result(&vo).json()
 }
 
-/// 修改用户信息
+/// 修改用户信息(暂时支持用户名以及密码修改)
+/// 必须登录过后才支持，这个接口必须不能在白名单之后。
 pub async fn user_update(arg: Json<UserEditDTO>) -> impl IntoResponse {
     let vo = CONTEXT.sys_user_service.edit_user_info(arg.0).await;
     return RespVO::from_result(&vo).json();

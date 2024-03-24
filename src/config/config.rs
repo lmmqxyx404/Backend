@@ -41,6 +41,8 @@ pub struct ApplicationConfig {
     pub login_fail_retry_wait_sec: u64,
     /// 日期格式化
     pub datetime_format: String,
+    /// TOKEN 失效时间
+    pub jwt_exp: usize,
 }
 
 ///默认配置
