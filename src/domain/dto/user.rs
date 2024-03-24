@@ -7,15 +7,20 @@ use crate::domain::table::enums::LoginCheck;
 
 use crate::domain::table::{SysUser, SysUserRole};
 use crate::util::password_encoder::PasswordEncoder;
+
 /// UserAddDTO
 /// 用户添加DTO,侧重于用户
+/// todo: 之后要做各种长度校验
 #[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct UserAddDTO {
+    /// 一般认为是 email account
+    /// 之后要做限制 校验之类的
     pub account: Option<String>,
     pub password: Option<String>,
     pub name: Option<String>,
-    pub role_id: Option<String>,
     pub login_check: Option<LoginCheck>,
+    pub role_id: Option<String>,
+    pub state: Option<i32>,
 }
 
 /// 用户角色添加，侧重于角色
@@ -84,7 +89,7 @@ impl From<UserEditDTO> for SysUser {
             login_check: arg.login_check,
             name: arg.name,
             state: arg.state,
-            del: None,
+            // del: None,
             create_date: None,
         }
     }

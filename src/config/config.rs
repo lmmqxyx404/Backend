@@ -24,7 +24,7 @@ pub struct ApplicationConfig {
     pub log_level: String,
     /// 日志类型 choose one of  ("mmap","file")
     pub log_type: String,
-    /// 日志相关 
+    /// 日志相关
     /// Log channel length: null for unbounded queue, non-null for bounded queue (better performance)
     pub log_chan_len: Option<usize>,
     ///短信缓存队列（mem/redis）
@@ -39,6 +39,8 @@ pub struct ApplicationConfig {
     pub login_fail_retry: u64,
     ///重试等待时间
     pub login_fail_retry_wait_sec: u64,
+    /// 日期格式化
+    pub datetime_format: String,
 }
 
 ///默认配置

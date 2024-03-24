@@ -41,7 +41,7 @@ impl SysUserRoleService {
             return Err(Error::from("添加角色时用户和角色不能为空！"));
         }
         let user_id = arg.user_id.as_deref().unwrap().to_string();
-        /// 形成角色
+        // 形成角色
         let mut user_role = SysUserRole::from(arg);
         if user_role.id.is_none() {
             user_role.id = Some(ObjectId::new().to_string());

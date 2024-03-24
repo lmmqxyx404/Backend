@@ -210,23 +210,27 @@ impl SysUserService {
         }
         // unwrap_or_def 这个方法需要进一步了解
         let old_user = self
-            .find_by_account(arg.account.as_ref().unwrap_or_def())
+            .find_by_account(arg.account.as_deref().unwrap_or_default())
             .await?;
         if old_user.is_some() {
             return Err(Error::from(format!(
                 "用户账户: {}已存在",
-                arg.account.as_ref().unwrap()
+                arg.account.as_deref().unwrap_or_default()
             )));
         }
         let mut password = arg.password.as_deref().unwrap_or_default().to_string();
         if password.is_empty() {
             // 设置默认密码
-            password = "123456".to_string()
+            // password = "123456".to_string()
+            
+            return Err(Error::from(format!("账户密码不能为空")));
         }
 
         arg.password = Some(password);
         let role_id = arg.role_id.clone();
         let user = SysUser::from(arg);
+        // 默认注册的是普通角色
+        // 之后考虑手动操作数据库 改变 role_id 或者调用接口批量添加管理员等其他角色
         if role_id.is_some() {
             CONTEXT
                 .sys_user_role_service

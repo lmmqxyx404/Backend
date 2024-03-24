@@ -28,7 +28,6 @@ use axum::{
 };
 
 async fn global_options_middleware(req: Request<Body>, next: Next) -> impl IntoResponse {
-    println!("haha");
     log::info!("Handling CORS for request method: {}", req.method());
     let response = match req.method() {
         // 返回统一的OPTIONS响应
@@ -84,6 +83,8 @@ async fn main() -> std::io::Result<()> {
         .route("/", get(|| async { "BACKEND START index ppp" }))
         // 图片验证码
         .route("/admin/captcha", get(img_verify_controller::captcha))
+        // 注册账号功能，校验放到后端来做 register
+        .route("/admin/sys_user_add", post(sys_user_controller::user_add))
         // 登录接口，实现登录功能
         .route("/admin/sys_login", post(sys_user_controller::login))
         .route("/admin/sys_user_info", post(sys_user_controller::user_info))
@@ -91,8 +92,7 @@ async fn main() -> std::io::Result<()> {
             "/admin/sys_user_detail",
             post(sys_user_controller::user_detail),
         )
-        .route("/admin/sys_user_add", post(sys_user_controller::user_add))
-        // 这是第二层
+        // 这是第二层中间件
         .layer(axum::middleware::from_fn(
             backend::middleware::auth_axum::auth,
         ))

@@ -62,7 +62,7 @@ pub async fn user_update(arg: Json<UserEditDTO>) -> impl IntoResponse {
 
 /// 添加用户
 /// 完成（2023年2月12日21点09分）
-/// todo: refactor
+/// todo: refactor 要对传入数据长度进行各种限制
 pub async fn user_add(arg: Json<UserAddDTO>) -> impl IntoResponse {
     let vo = CONTEXT.sys_user_service.add(arg.0).await;
     return RespVO::from_result(&vo).json();

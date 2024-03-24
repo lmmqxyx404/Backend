@@ -28,7 +28,7 @@ pub struct SysUser {
     /// 用户名登录
     pub name: Option<String>,
     pub state: Option<i32>,
-    pub del: Option<i32>,
+    // pub del: Option<i32>,
     pub create_date: Option<DateTime>,
 }
 
@@ -40,9 +40,8 @@ impl From<UserAddDTO> for SysUser {
             account: arg.account.clone(),
             password: PasswordEncoder::encode(&arg.password.unwrap_or_default()).into(),
             name: arg.name.clone(),
-            login_check: arg.login_check,
-            state: 0.into(),
-            del: 0.into(),
+            login_check: arg.login_check.clone(),
+            state: Some(arg.state.unwrap_or(1)),
             create_date: DateTime::now().into(),
         }
     }
@@ -169,7 +168,7 @@ pub async fn sync_tables(rb: &RBatis) {
         login_check: Some(LoginCheck::NoCheck),
         state: Some(0),
         create_date: Some(DateTime::now()),
-        del: None,
+        // del: None,
     };
     let _ = RBatis::sync(&conn, mapper, &table, "sys_user").await;
     let table = SysUserRole {
@@ -213,7 +212,7 @@ pub async fn sync_tables_data(rb: &RBatis) {
             name: Some("admin".to_string()),
             login_check: Some(LoginCheck::PasswordCheck),
             state: Some(1),
-            del: None,
+            // del: None,
             create_date: Some(DateTime::now()),
         },
     )
@@ -339,6 +338,7 @@ pub async fn sync_tables_data(rb: &RBatis) {
     }
 }
 
+#[cfg(test)]
 mod test {
     use crate::domain::table::enums::LoginCheck;
 
@@ -352,6 +352,7 @@ mod test {
             name: Some("String".to_string()),
             role_id: Some("String".to_string()),
             login_check: Some(LoginCheck::NoCheck),
+            state: None,
         };
         let b = SysUser::from(user);
         println!("{:?}", b);
