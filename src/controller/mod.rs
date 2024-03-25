@@ -16,3 +16,6 @@ pub mod sys_dict_controller;
 
 ///系统权限资源接口
 pub mod sys_res_controller;
+
+/// 获取订阅地址接口
+pub mod shop_proxy_controller;

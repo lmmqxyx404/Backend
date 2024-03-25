@@ -9,7 +9,7 @@
 // (depreciated) use actix_web::{web, App, HttpResponse, HttpServer, Responder};
 
 use backend::{
-    controller::{img_verify_controller, sys_user_controller},
+    controller::{img_verify_controller, shop_proxy_controller, sys_user_controller},
     domain::table,
     service::CONTEXT,
 };
@@ -81,6 +81,7 @@ async fn main() -> std::io::Result<()> {
     // 3.1 首先创建路由实例App::new()
     let app = Router::new()
         .route("/", get(|| async { "BACKEND START index ppp" }))
+        .route("/get_yaml", get(shop_proxy_controller::serve_yaml))
         // 图片验证码
         .route("/admin/captcha", get(img_verify_controller::captcha))
         // 注册账号功能，校验放到后端来做 register
