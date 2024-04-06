@@ -12,7 +12,7 @@ use crate::{
     pool,
 };
 
-use super::{sys_role_service::SysRoleService, CONTEXT};
+use super::CONTEXT;
 
 const RES_KEY: &'static str = "sys_res:all";
 /// 系统资源服务
@@ -99,7 +99,7 @@ impl SysResService {
             let all = self.update_cache().await?;
             return Ok(all);
         }
-        /// 之后可以添加代码实现打印日志
+        // 之后可以添加代码实现打印日志
         let mut arr = vec![];
         if let Ok(v) = js {
             for x in v.unwrap_or(vec![]) {
@@ -107,7 +107,6 @@ impl SysResService {
             }
         }
         Ok(arr)
-        //Err(Error::from("temporary"))
     }
 
     pub fn make_res_ids(&self, args: &Vec<SysPermissionVO>) -> Vec<String> {

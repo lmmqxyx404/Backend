@@ -4,10 +4,7 @@ use rbatis::{Page, PageRequest};
 
 use crate::{
     domain::{
-        dto::{
-            permission,
-            role::{RoleAddDTO, RoleEditDTO, RolePageDTO},
-        },
+        dto::role::{RoleAddDTO, RoleEditDTO, RolePageDTO},
         table::{SysRole, SysRolePermission, SysUserRole},
         vo::{res::SysPermissionVO, role::SysRoleVO},
     },
@@ -120,12 +117,11 @@ impl SysRoleService {
         if !children.is_empty() {
             arg.childs = Some(children);
         }
-        // Err(Error::from("hello"))
     }
 
     /// 角色添加
     pub async fn add_role(&self, arg: RoleAddDTO) -> Result<(u64, String)> {
-        let mut role = SysRole::from(arg);
+        let role = SysRole::from(arg);
         let result = (
             SysRole::insert(pool!(), &role).await?.rows_affected,
             role.id.clone().unwrap(),
@@ -136,7 +132,7 @@ impl SysRoleService {
     }
 
     /// 角色删除
-    pub async fn remove(&self, id: &str) -> Result<(u64)> {
+    pub async fn remove(&self, id: &str) -> Result<u64> {
         // trash service 暂时不需要
         let result = SysRole::delete_by_column(pool!(), field_name!(SysRole.id), id).await?;
         self.update_cache().await?;

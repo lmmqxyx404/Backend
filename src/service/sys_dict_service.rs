@@ -44,12 +44,10 @@ impl SysDictService {
     /// 修改字典
     pub async fn edit(&self, arg: &DictEditDTO) -> Result<u64> {
         let data = SysDict::from(arg);
-        /// 以后逻辑可能会改
-        ///
+        // TODO: 以后逻辑可能会改
         let res = SysDict::update_by_column(pool!(), &data, "id").await?;
         self.update_cache().await?;
         Ok(res.rows_affected)
-        // Err(Error::from("zan wei wancheng"))
     }
 
     /// 删除字典
