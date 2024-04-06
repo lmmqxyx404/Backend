@@ -8,10 +8,11 @@ use crate::{
             RoleAddDTO, RoleEditDTO, RolePageDTO, SysRoleResAddDTO, SysRoleResPageDTO,
             SysRoleResUpdateDTO,
         },
-        table::SysRolePermission,
+        table::{SysRolePermission, SysUserRole},
         vo::{res::SysPermissionVO, role::SysRoleVO},
     },
     error::{Error, Result},
+    pool,
     util::options::OptionStringRefUnwrapOrDefault,
 };
 
@@ -100,8 +101,9 @@ impl SysRoleResService {
 
     /// 删除角色资源（依据role_id）
     pub async fn remove_by_role_id(&self, role_id: &str) -> Result<u64> {
-        Err(Error::from("zan wei wancheng"))
-        // Ok(SysRolePermission)
+        Ok(SysUserRole::delete_by_column(pool!(), "role_id", role_id)
+            .await?
+            .rows_affected)
     }
 
     /// 角色删除，同时删除用户关系，权限关系
@@ -111,8 +113,11 @@ impl SysRoleResService {
             .sys_user_role_service
             .remove_by_role_id(role_id)
             .await?;
-        // todo:
-        Err(Error::from("zan wei wancheng"))
+        let remove_role_res = CONTEXT
+            .sys_role_res_service
+            .remove_by_role_id(role_id)
+            .await?;
+        return Ok(remove_roles + remove_user_roles + remove_role_res);
     }
 
     pub async fn edit(&self, arg: &SysRoleResUpdateDTO) -> Result<u64> {
@@ -126,9 +131,21 @@ impl SysRoleResService {
             .await?;
         todo!()
     }
-
+    /// as the fn name described
     fn loop_find_role_ids(&self, arg: &Vec<SysRoleVO>) -> Vec<String> {
-        // todo
-        todo!()
+        let mut results = vec![];
+        for x in arg {
+            results.push(x.id.as_deref().unwrap_or_default().to_string());
+            match &x.childs {
+                Some(childs) => {
+                    let ids = self.loop_find_role_ids(childs);
+                    for id in ids {
+                        results.push(id);
+                    }
+                }
+                _ => {}
+            }
+        }
+        return results;
     }
 }
