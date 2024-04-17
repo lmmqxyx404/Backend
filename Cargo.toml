@@ -23,9 +23,8 @@ rbdc-sqlite = { version = "4.5" }
 # web server
 # actix-web = { version = "4.0", default-features = false, features = ["macros"] }
 
-axum = {version = "0.7.4",features = ["macros"]}
-
-# static 
+axum = { version = "0.7.4", features = ["macros"] }
+hyper = { version = "=0.14", features = ["full"] }  # static 
 # change to once_cell
 # lazy_static = "1.4.0"
 once_cell = "1.9"
